@@ -4,7 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class BombermanBattleRoyaleGame extends Game {
@@ -13,6 +16,7 @@ public class BombermanBattleRoyaleGame extends Game {
 	GameMap gm;
 
 	public static World world;
+	Box2DDebugRenderer debugRenderer;
 	
 	@Override
 	public void create () {
@@ -20,14 +24,28 @@ public class BombermanBattleRoyaleGame extends Game {
 		gm = new GameMap();
 		img = new Texture("badlogic.jpg");
 		gm.create();
-//		world.createBody();
-//		world.
+		world = new World(new Vector2(0,0),true);
+		double scale = 80.0;
+		for(int r=0; r<11; r++){
+			for(int c=0;c<11;c++){
+				if(GameMap.map[r][c]==0) continue;
+				BodyDef bd = new BodyDef();
+				bd.type = BodyDef.BodyType.StaticBody;
+				bd.position.set((int)(r*scale + scale/2),(int)(c*scale + scale/2));
+				Body body = world.createBody(bd);
+				PolygonShape ps = new PolygonShape();
+				ps.setAsBox((int)(scale/2),(int)(scale/2));
+				body.createFixture(ps, 0.0f);
+			}
+		}
+		debugRenderer = new Box2DDebugRenderer();
 }
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
 		gm.render();
+		debugRenderer.render(world,gm.camera.combined);
 //		batch.begin();
 //		batch.draw(img, 0, 0);
 //		batch.end();
