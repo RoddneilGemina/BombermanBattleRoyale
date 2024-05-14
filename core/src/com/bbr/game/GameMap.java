@@ -29,10 +29,11 @@ public class GameMap extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
     TiledMap tmap;
-    OrthographicCamera camera;
+    public static Bomber basil;
+    public static OrthographicCamera camera;
 
 
-    OrthogonalTiledMapRenderer renderer;
+    public static OrthogonalTiledMapRenderer renderer;
 
     @Override
     public void create () {
@@ -62,6 +63,8 @@ public class GameMap extends ApplicationAdapter {
         camera.update();
         renderer.setView(camera);
         renderer.render();
+        camera.position.x = basil.getPosX();
+        camera.position.y = basil.getPosY();
     }
 
     @Override
