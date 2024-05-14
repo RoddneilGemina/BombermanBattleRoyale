@@ -16,6 +16,7 @@ public class BombermanBattleRoyaleGame extends Game {
 	GameMap gm;
 
 	public static World world;
+	Bomber basil;
 	Box2DDebugRenderer debugRenderer;
 	
 	@Override
@@ -39,12 +40,14 @@ public class BombermanBattleRoyaleGame extends Game {
 			}
 		}
 		debugRenderer = new Box2DDebugRenderer();
+		basil = new Bomber();
 }
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
 		gm.render();
+		basil.render();
 		debugRenderer.render(world,gm.camera.combined);
 //		batch.begin();
 //		batch.draw(img, 0, 0);
