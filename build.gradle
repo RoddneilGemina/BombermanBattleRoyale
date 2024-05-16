@@ -71,6 +71,8 @@ project(":html") {
         api "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
         api "com.kotcrab.vis:vis-ui:1.4.11:sources"
+        implementation 'com.esotericsoftware:kryo:5.2.0'
+        implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
         
     }
 }

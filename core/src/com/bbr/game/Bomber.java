@@ -1,51 +1,53 @@
 package com.bbr.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import org.w3c.dom.Text;
 
 public class Bomber {
+    public int id;
     private Body body;
     private Sprite sprite;
-    private Texture texture;
-    private SpriteBatch batch;
+    private static Texture texture = null;
+    public static SpriteBatch batch;
     private int posX;
     private int posY;
-
-    public Bomber()
-    {
-        posX = (int)(BombermanBattleRoyaleGame.SCALE + BombermanBattleRoyaleGame.SCALE/2);
-        posY = (int)(BombermanBattleRoyaleGame.SCALE + BombermanBattleRoyaleGame.SCALE/2);
-
-        batch = new SpriteBatch();
-        texture = new Texture("bomber.png");
+    private boolean isNPC = true;
+    public Bomber(int posX, int posY, int id){
+        this.id = id;
+        this.posX = posX;
+        this.posY = posY;
+        if(texture == null) texture = new Texture("bomber.png");
         sprite = new Sprite(texture);
-        this.sprite.setPosition(0, 0);
+        if(true){
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(posX, posY);
 
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(posX,posY);
+            body = MainGame.world.createBody(bodyDef);
 
-        body = BombermanBattleRoyaleGame.world.createBody(bodyDef);
+            PolygonShape boxShape = new PolygonShape();
+            boxShape.setAsBox(0.25f * MainGame.SCALE, 0.25f * MainGame.SCALE);
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = boxShape;
+            fixtureDef.density = 1.0f;
+            fixtureDef.friction = 0.0f;
+            MassData md = new MassData();
+            md.mass = 0.00001f;
+            body.setMassData(md);
 
-        PolygonShape boxShape = new PolygonShape();
-        boxShape.setAsBox(0.25f*BombermanBattleRoyaleGame.SCALE,0.25f*BombermanBattleRoyaleGame.SCALE);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = boxShape;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.0f;
-        MassData md = new MassData();
-        md.mass = 0.00001f;
-        body.setMassData(md);
+            body.createFixture(fixtureDef);
+            body.setLinearDamping(30f);
 
-        body.createFixture(fixtureDef);
-        body.setLinearDamping(30f);
+            boxShape.dispose();
+        }
+    }
 
-        boxShape.dispose();
+    public Bomber(int id) {
+        this((int)(MainGame.SCALE + MainGame.SCALE/2),(int)(MainGame.SCALE + MainGame.SCALE/2),id);
+        isNPC = false;
     }
     public Body getBody(){return body;}
     int speed = 500;
@@ -55,6 +57,9 @@ public class Bomber {
         //body.setLinearVelocity(x*speed,y*speed);
         //body.applyForceToCenter(x*speed,y*speed,true);
 //        System.out.println("Player pos " + body.getPosition());
+    }
+    public void teleport(float x, float y){
+        body.setTransform(x,y,body.getAngle());
     }
     int flipframe = 0;
     private static final int FLIPFRAMEMAX = 20;
@@ -68,12 +73,10 @@ public class Bomber {
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         batch = (SpriteBatch) GameMap.renderer.getBatch();
-        batch.begin();
-        batch.draw(sprite, body.getPosition().x - BombermanBattleRoyaleGame.SCALE/2, body.getPosition().y - BombermanBattleRoyaleGame.SCALE/2, 75*BombermanBattleRoyaleGame.SCALE/80f, 75*BombermanBattleRoyaleGame.SCALE/80f);
-        batch.end();
+        batch.draw(sprite, body.getPosition().x - MainGame.SCALE/2, body.getPosition().y - MainGame.SCALE/2, 75* MainGame.SCALE/80f, 75* MainGame.SCALE/80f);
     }
     public void dropBomb(){
-        BombermanBattleRoyaleGame.bombsAndExplosions.add(new Bomb(posX,posY));
+        MainGame.bombsAndExplosions.add(new Bomb(posX,posY));
         System.out.println("Player world pos : " +body.getPosition().x + ",  " +body.getPosition().y);
     }
 

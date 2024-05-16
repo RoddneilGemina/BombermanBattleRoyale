@@ -2,7 +2,6 @@ package com.bbr.game;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.bbr.game.BombermanBattleRoyaleGame;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -12,6 +11,6 @@ public class DesktopLauncher {
 		config.setTitle("BombermanBattleRoyale");
 		config.setWindowSizeLimits(640,480,640,480);
 		config.setResizable(false);
-		new Lwjgl3Application(new BombermanBattleRoyaleGame(), config);
+		new Lwjgl3Application(new MainGame((arg.length>0 && arg[0].matches("server"))), config);
 	}
 }

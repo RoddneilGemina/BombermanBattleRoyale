@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.bbr.net.GameClient;
 
 public class Controller {
 
@@ -14,6 +15,7 @@ public class Controller {
 
     public Controller(Bomber bomber){
         this.bomber = bomber;
+        GameMap.setBomber(bomber);
         cam = GameMap.camera;
     }
 
@@ -23,5 +25,6 @@ public class Controller {
         if(Gdx.input.isKeyPressed(controls[2])) bomber.moveBody(0,1);
         if(Gdx.input.isKeyPressed(controls[3])) bomber.moveBody(0,-1);
         if(Gdx.input.isKeyJustPressed(controls[4])) bomber.dropBomb();
+        MainGame.gameClient.updatePlayerBomber(bomber);
     }
 }

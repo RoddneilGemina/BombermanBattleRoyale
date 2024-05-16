@@ -28,19 +28,22 @@ public class GameMap extends ApplicationAdapter {
     };
     SpriteBatch batch;
     Texture img;
-    TiledMap tmap;
-    public static Bomber basil;
+    TiledMap tiledMap;
+    private static Bomber bomber;
     public static OrthographicCamera camera;
-
-
     public static OrthogonalTiledMapRenderer renderer;
+
+    public static void setBomber(Bomber bomber) {
+        GameMap.bomber = bomber;
+        camera.zoom = 0.125f;
+    }
 
     @Override
     public void create () {
         batch = new SpriteBatch();
         img = new Texture("tiles.png");
-        tmap = new TiledMap();
-        MapLayers layers = tmap.getLayers();
+        tiledMap = new TiledMap();
+        MapLayers layers = tiledMap.getLayers();
         int mapW = 11, mapH = 11;
         TiledMapTileLayer layer1 = new TiledMapTileLayer(mapW, mapH, 16, 16);
         for(int r=0; r<mapW; r++){
@@ -52,11 +55,13 @@ public class GameMap extends ApplicationAdapter {
             }
         }
         layers.add(layer1);
-        renderer= new OrthogonalTiledMapRenderer(tmap, (float)(5.0/1.0)*BombermanBattleRoyaleGame.SCALE/80f);
+        renderer= new OrthogonalTiledMapRenderer(tiledMap, (float)(5.0/1.0)* MainGame.SCALE/80f);
         camera = new OrthographicCamera();
 
         camera.setToOrtho(false, 640, 480);
-        camera.zoom =0.125f;
+        camera.zoom =0.25f;
+        camera.position.x = 50;
+        camera.position.y = 50;
     }
 
     @Override
@@ -65,8 +70,11 @@ public class GameMap extends ApplicationAdapter {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-        camera.position.x = basil.getBody().getPosition().x;
-        camera.position.y = basil.getBody().getPosition().y;
+        if(bomber != null){
+            camera.position.x = bomber.getBody().getPosition().x;
+            camera.position.y = bomber.getBody().getPosition().y;
+        }
+
     }
 
     @Override

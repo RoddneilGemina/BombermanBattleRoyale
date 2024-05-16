@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-
-import java.util.ArrayList;
 
 public class Bomb {
     private Body body;
@@ -22,7 +21,7 @@ public class Bomb {
 
         System.out.println("Bomb : "+posX +", "+posY);
         sprite = new Sprite((texture));
-        float SCALE = BombermanBattleRoyaleGame.SCALE;
+        float SCALE = MainGame.SCALE;
 
         // set body type and position
         BodyDef bd = new BodyDef();
@@ -30,7 +29,7 @@ public class Bomb {
         bd.position.set(posX,posY);
 
         // make a physical box2d body in the box2d world
-        body = BombermanBattleRoyaleGame.world.createBody(bd);
+        body = MainGame.world.createBody(bd);
 
         // make the hitbox for the body;
         PolygonShape ps = new PolygonShape();
@@ -62,31 +61,31 @@ public class Bomb {
         sprite.setRegion(i*16,0,16,16);
         batch.setProjectionMatrix(GameMap.camera.combined);
 
-        float scaleFactor = BombermanBattleRoyaleGame.SCALE/80f;
-        batch.draw(sprite, (body.getPosition().x - BombermanBattleRoyaleGame.SCALE/2), (body.getPosition().y - BombermanBattleRoyaleGame.SCALE/2),
+        float scaleFactor = MainGame.SCALE/80f;
+        batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
                 80*scaleFactor, 80*scaleFactor);
     }
     private void explode(){
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         int maxX = spanX>>1, maxY = spanY>>1;
-        BombermanBattleRoyaleGame.bombsAndExplosions.add(new Explosion(posX,posY,20));
-        float scale = BombermanBattleRoyaleGame.SCALE;
+        MainGame.bombsAndExplosions.add(new Explosion(posX,posY,20));
+        float scale = MainGame.SCALE;
         for(int i=1;i <= maxX && i <= maxY; i++){
             if(i<=maxX){
-                BombermanBattleRoyaleGame.bombsAndExplosions.add(new Explosion((int)(posX+i*scale),posY,20));
-                BombermanBattleRoyaleGame.bombsAndExplosions.add(new Explosion((int)(posX-i*scale),posY,20));
+                MainGame.bombsAndExplosions.add(new Explosion((int)(posX+i*scale),posY,20));
+                MainGame.bombsAndExplosions.add(new Explosion((int)(posX-i*scale),posY,20));
             }
             if(i<=maxY){
-                BombermanBattleRoyaleGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY+i*scale),20));
-                BombermanBattleRoyaleGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY-i*scale),20));
+                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY+i*scale),20));
+                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY-i*scale),20));
             }
         }
         dispose();
     }
     public void dispose(){
-        BombermanBattleRoyaleGame.world.destroyBody(body);
-        BombermanBattleRoyaleGame.bombsAndExplosions.remove(this);
+        MainGame.world.destroyBody(body);
+        MainGame.bombsAndExplosions.remove(this);
     }
 }
 class Explosion {
@@ -103,15 +102,19 @@ class Explosion {
         sprite = new Sprite(texture);
         sprite.setRegion(0,0,16,16);
 
-        float SCALE = BombermanBattleRoyaleGame.SCALE;
+        float SCALE = MainGame.SCALE;
         BodyDef bd = new BodyDef();
         bd.type = BodyDef.BodyType.DynamicBody;
         //bd.position.set((int)(5*posX*SCALE + SCALE/2),(int)(5*posY*SCALE + SCALE/2));
         bd.position.set(posX,posY);
-        body = BombermanBattleRoyaleGame.world.createBody(bd);
+        body = MainGame.world.createBody(bd);
         PolygonShape ps = new PolygonShape();
         ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
-        body.createFixture(ps, 0.0f);
+        FixtureDef fd = new FixtureDef();
+        fd.shape = ps;
+        fd.filter.categoryBits = MainGame.EXPLOSION_BITS;
+        fd.filter.maskBits = 0b0010;
+        body.createFixture(fd);
         ps.dispose();
         if(batch == null){
             batch = new SpriteBatch();
@@ -122,12 +125,12 @@ class Explosion {
         if(frames++ == 10) sprite.setRegion(16,0,16,16);
         if(frames >= 30) dispose();
         batch.setProjectionMatrix(GameMap.camera.combined);
-        batch.draw(sprite, (body.getPosition().x - BombermanBattleRoyaleGame.SCALE/2), (body.getPosition().y - BombermanBattleRoyaleGame.SCALE/2),
-                80*BombermanBattleRoyaleGame.SCALE/80f, 80*BombermanBattleRoyaleGame.SCALE/80f);
+        batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
+                80* MainGame.SCALE/80f, 80* MainGame.SCALE/80f);
     }
     public void dispose(){
-        BombermanBattleRoyaleGame.world.destroyBody(body);
-        BombermanBattleRoyaleGame.bombsAndExplosions.remove(this);
+        MainGame.world.destroyBody(body);
+        MainGame.bombsAndExplosions.remove(this);
     }
 
 }
