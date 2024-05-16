@@ -19,18 +19,25 @@ public class Bomb {
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
         this.time = time; this.explosionDelay = explosionDelay;
+
         System.out.println("Bomb : "+posX +", "+posY);
         sprite = new Sprite((texture));
         float SCALE = BombermanBattleRoyaleGame.SCALE;
+
+        // set body type and position
         BodyDef bd = new BodyDef();
         bd.type = BodyDef.BodyType.DynamicBody;
         bd.position.set(posX,posY);
 
+        // make a physical box2d body in the box2d world
         body = BombermanBattleRoyaleGame.world.createBody(bd);
+
+        // make the hitbox for the body;
         PolygonShape ps = new PolygonShape();
         ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
         body.createFixture(ps, 0.0f);
-        ps.dispose();
+
+        ps.dispose(); // dispose polyshape because it has overstayed its welcome
         if(batch == null){
             batch = new SpriteBatch();
         }
