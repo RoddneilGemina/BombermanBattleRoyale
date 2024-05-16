@@ -52,9 +52,11 @@ public class GameMap extends ApplicationAdapter {
             }
         }
         layers.add(layer1);
-        renderer= new OrthogonalTiledMapRenderer(tmap, (float)(5.0/1.0));
+        renderer= new OrthogonalTiledMapRenderer(tmap, (float)(5.0/1.0)*BombermanBattleRoyaleGame.SCALE/80f);
         camera = new OrthographicCamera();
+
         camera.setToOrtho(false, 640, 480);
+        camera.zoom =0.125f;
     }
 
     @Override
@@ -63,8 +65,8 @@ public class GameMap extends ApplicationAdapter {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-        camera.position.x = basil.getPosX();
-        camera.position.y = basil.getPosY();
+        camera.position.x = basil.getBody().getPosition().x;
+        camera.position.y = basil.getBody().getPosition().y;
     }
 
     @Override

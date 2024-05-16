@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.*;
 import org.w3c.dom.Text;
 
 public class Bomber {
@@ -21,8 +18,8 @@ public class Bomber {
 
     public Bomber()
     {
-        posX = 120;
-        posY = 120;
+        posX = (int)(BombermanBattleRoyaleGame.SCALE + BombermanBattleRoyaleGame.SCALE/2);
+        posY = (int)(BombermanBattleRoyaleGame.SCALE + BombermanBattleRoyaleGame.SCALE/2);
 
         batch = new SpriteBatch();
         texture = new Texture("bomber.png");
@@ -36,34 +33,48 @@ public class Bomber {
         body = BombermanBattleRoyaleGame.world.createBody(bodyDef);
 
         PolygonShape boxShape = new PolygonShape();
-        boxShape.setAsBox(35f, 35f);
-
+        boxShape.setAsBox(0.25f*BombermanBattleRoyaleGame.SCALE,0.25f*BombermanBattleRoyaleGame.SCALE);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = boxShape;
         fixtureDef.density = 1.0f;
-        fixtureDef.friction = -40f;
+        fixtureDef.friction = 0.0f;
+        MassData md = new MassData();
+        md.mass = 0.00001f;
+        body.setMassData(md);
 
         body.createFixture(fixtureDef);
+        body.setLinearDamping(30f);
 
         boxShape.dispose();
     }
-
+    public Body getBody(){return body;}
+    int speed = 500;
     public void moveBody(float x, float y){
-        //body.applyLinearImpulse(new Vector2(x,y), body.getWorldCenter(), true);
+        body.applyLinearImpulse(new Vector2(x*speed,y*speed), body.getWorldCenter(), true);
 //        body.applyForceToCenter(x*100,y*100,true);
-        body.setLinearVelocity(x,y);
-        System.out.println("Player pos " + body.getPosition());
+        //body.setLinearVelocity(x*speed,y*speed);
+        //body.applyForceToCenter(x*speed,y*speed,true);
+//        System.out.println("Player pos " + body.getPosition());
     }
-    public void update()
-    {
-    }
-
+    int flipframe = 0;
+    private static final int FLIPFRAMEMAX = 20;
     public void render()
     {
+        flipframe++;
+        if(flipframe>=FLIPFRAMEMAX){
+            flipframe = 0;
+            sprite.flip(true,false);
+        }
+        posX = Math.round(body.getPosition().x);
+        posY = Math.round(body.getPosition().y);
         batch = (SpriteBatch) GameMap.renderer.getBatch();
         batch.begin();
-        batch.draw(texture, body.getPosition().x - 40, body.getPosition().y - 40, 75, 75);
+        batch.draw(sprite, body.getPosition().x - BombermanBattleRoyaleGame.SCALE/2, body.getPosition().y - BombermanBattleRoyaleGame.SCALE/2, 75*BombermanBattleRoyaleGame.SCALE/80f, 75*BombermanBattleRoyaleGame.SCALE/80f);
         batch.end();
+    }
+    public void dropBomb(){
+        BombermanBattleRoyaleGame.bombsAndExplosions.add(new Bomb(posX,posY));
+        System.out.println("Player world pos : " +body.getPosition().x + ",  " +body.getPosition().y);
     }
 
     public int getPosX() {

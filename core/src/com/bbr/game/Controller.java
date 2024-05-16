@@ -10,7 +10,7 @@ public class Controller {
     private static int[] controls = {Input.Keys.A,Input.Keys.D,Input.Keys.W,Input.Keys.S,Input.Keys.H,Input.Keys.J,Input.Keys.K};
     Bomber bomber;
     OrthographicCamera cam;
-    int speed = 20;
+
 
     public Controller(Bomber bomber){
         this.bomber = bomber;
@@ -18,10 +18,10 @@ public class Controller {
     }
 
     public void render(){
-        if(Gdx.input.isKeyPressed(controls[0])) bomber.moveBody(-speed,0);
-        if(Gdx.input.isKeyPressed(controls[1])) bomber.moveBody(speed,0);
-        if(Gdx.input.isKeyPressed(controls[2])) bomber.moveBody(0,speed);
-        if(Gdx.input.isKeyPressed(controls[3])) bomber.moveBody(0,-speed);
-        if(Gdx.input.isKeyPressed(controls[4]));
+        if(Gdx.input.isKeyPressed(controls[0])) bomber.moveBody(-1,0);
+        if(Gdx.input.isKeyPressed(controls[1])) bomber.moveBody(1,0);
+        if(Gdx.input.isKeyPressed(controls[2])) bomber.moveBody(0,1);
+        if(Gdx.input.isKeyPressed(controls[3])) bomber.moveBody(0,-1);
+        if(Gdx.input.isKeyJustPressed(controls[4])) bomber.dropBomb();
     }
 }

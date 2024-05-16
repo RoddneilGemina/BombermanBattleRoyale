@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.ArrayList;
+
 public class BombermanBattleRoyaleGame extends Game {
 	SpriteBatch batch;
 	Texture img;
@@ -19,6 +21,8 @@ public class BombermanBattleRoyaleGame extends Game {
 	Bomber basil;
 	Controller con;
 	Box2DDebugRenderer debugRenderer;
+	public static final float SCALE = 10f;
+	public static ArrayList<Object> bombsAndExplosions = new ArrayList<>();
 	
 	@Override
 	public void create () {
@@ -27,16 +31,15 @@ public class BombermanBattleRoyaleGame extends Game {
 		img = new Texture("badlogic.jpg");
 		gm.create();
 		world = new World(new Vector2(0,0),true);
-		double scale = 80.0;
 		for(int r=0; r<11; r++){
 			for(int c=0;c<11;c++){
 				if(GameMap.map[r][c]==0) continue;
 				BodyDef bd = new BodyDef();
 				bd.type = BodyDef.BodyType.StaticBody;
-				bd.position.set((int)(r*scale + scale/2),(int)(c*scale + scale/2));
+				bd.position.set((int)(r*SCALE + SCALE/2),(int)(c*SCALE + SCALE/2));
 				Body body = world.createBody(bd);
 				PolygonShape ps = new PolygonShape();
-				ps.setAsBox((int)(scale/2),(int)(scale/2));
+				ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
 				body.createFixture(ps, 0.0f);
 			}
 		}
@@ -49,12 +52,23 @@ public class BombermanBattleRoyaleGame extends Game {
 	@Override
 	public void render () {
 		world.step(1/60f,6,2);
-		ScreenUtils.clear(1, 0, 0, 1);
+		ScreenUtils.clear(0, 0, 0, 1);
 		gm.render();
 		con.render();
-		debugRenderer.render(world,gm.camera.combined);
+		debugRenderer.render(world,GameMap.camera.combined);
+		if(Bomb.batch != null) {
+			Bomb.batch.begin();
+			for (int i =0; i < bombsAndExplosions.size(); i++) {
+				Object o = bombsAndExplosions.get(i);
+				if (o instanceof Bomb) {
+					((Bomb) o).render();
+				} else if (o instanceof Explosion) {
+					((Explosion) o).render();
+				}
+			}
+			Bomb.batch.end();
+		}
 		basil.render();
-		System.out.println(world.getBodyCount());
 //		batch.begin();
 //		batch.draw(img, 0, 0);
 //		batch.end();
