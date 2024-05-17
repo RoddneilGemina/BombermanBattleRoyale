@@ -58,11 +58,11 @@ public class Bomb {
         //batch.draw(sprite,)
         int i = 0;
         if(isFrame2) i++;
-        sprite.setRegion(i*16,0,16,16);
+        if(sprite!=null) sprite.setRegion(i*16,0,16,16);
         batch.setProjectionMatrix(GameMap.camera.combined);
 
         float scaleFactor = MainGame.SCALE/80f;
-        batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
+        if(sprite!=null) batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
                 80*scaleFactor, 80*scaleFactor);
     }
     private void explode(){
@@ -86,6 +86,8 @@ public class Bomb {
     public void dispose(){
         MainGame.world.destroyBody(body);
         MainGame.bombsAndExplosions.remove(this);
+        sprite = null;
+        body = null;
     }
 }
 class Explosion {
@@ -125,12 +127,14 @@ class Explosion {
         if(frames++ == 10) sprite.setRegion(16,0,16,16);
         if(frames >= 30) dispose();
         batch.setProjectionMatrix(GameMap.camera.combined);
-        batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
+        if(sprite!=null) batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
                 80* MainGame.SCALE/80f, 80* MainGame.SCALE/80f);
     }
     public void dispose(){
         MainGame.world.destroyBody(body);
         MainGame.bombsAndExplosions.remove(this);
+        sprite = null;
+        body = null;
     }
 
 }

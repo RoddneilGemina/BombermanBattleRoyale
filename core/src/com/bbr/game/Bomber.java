@@ -28,26 +28,28 @@ public class Bomber {
 
             body = MainGame.world.createBody(bodyDef);
 
-            PolygonShape boxShape = new PolygonShape();
-            boxShape.setAsBox(0.25f * MainGame.SCALE, 0.25f * MainGame.SCALE);
-            FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.shape = boxShape;
-            fixtureDef.density = 1.0f;
-            fixtureDef.friction = 0.0f;
+
             MassData md = new MassData();
             md.mass = 0.00001f;
             body.setMassData(md);
 
-            body.createFixture(fixtureDef);
-            body.setLinearDamping(30f);
 
-            boxShape.dispose();
         }
     }
 
     public Bomber(int id) {
         this((int)(MainGame.SCALE + MainGame.SCALE/2),(int)(MainGame.SCALE + MainGame.SCALE/2),id);
         isNPC = false;
+
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(0.25f * MainGame.SCALE, 0.25f * MainGame.SCALE);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = boxShape;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.0f;
+        body.createFixture(fixtureDef);
+        body.setLinearDamping(30f);
+        boxShape.dispose();
     }
     public Body getBody(){return body;}
     int speed = 500;
@@ -74,6 +76,7 @@ public class Bomber {
         posY = Math.round(body.getPosition().y);
         batch = (SpriteBatch) GameMap.renderer.getBatch();
         batch.draw(sprite, body.getPosition().x - MainGame.SCALE/2, body.getPosition().y - MainGame.SCALE/2, 75* MainGame.SCALE/80f, 75* MainGame.SCALE/80f);
+        //System.out.println("HIIIII my id is "+id);
     }
     public void dropBomb(){
         MainGame.bombsAndExplosions.add(new Bomb(posX,posY));

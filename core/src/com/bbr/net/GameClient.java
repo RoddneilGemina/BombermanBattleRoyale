@@ -30,9 +30,15 @@ public class GameClient {
                     ArrayList<Network.PlayerRep> apr = gameState.players;
                     Map<Integer,Bomber> bombers = MainGame.bombers;
                     for(int i = 0; i < apr.size(); i++){
-                        if(!bombers.containsKey(apr.get(i).bomberID)){
+                        if(! bombers.containsKey(apr.get(i).bomberID)){
+                            System.out.println("Received bomber : ID->"+apr.get(i).bomberID + " PosX->"+apr.get(i).posX+ " PosY->"+apr.get(i).posY);
                             Network.PlayerRep pr = apr.get(i);
                             bombers.put(pr.bomberID,new Bomber(pr.posX,pr.posY,pr.bomberID));
+                        } else if (MainGame.mainBomber != null && MainGame.mainBomber.id != apr.get(i).bomberID){
+                            int x = apr.get(i).posX;
+                            int y = apr.get(i).posY;
+                            int id= apr.get(i).bomberID;
+                            bombers.get(id).teleport(x,y);
                         }
                     }
                 }

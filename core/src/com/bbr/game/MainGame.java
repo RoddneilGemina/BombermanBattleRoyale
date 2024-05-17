@@ -113,7 +113,7 @@ public class MainGame extends Game {
 		for(int i = 0; i < keys.length; i++){
 			Bomber curr = bombers.get(keys[i]);
 			curr.render();
-			if(isServer) apr.add(new Network.PlayerRep(i,curr.getPosX(),curr.getPosY()));
+			if(isServer) apr.add(new Network.PlayerRep(keys[i],curr.getPosX(),curr.getPosY()));
 		}
 
 		GameMap.renderer.getBatch().end();
