@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		config.setTitle("BombermanBattleRoyale");
 		config.setWindowSizeLimits(640,480,640,480);
 		config.setResizable(false);
+
 		new Lwjgl3Application(new MainGame((arg.length>0 && arg[0].matches("server"))), config);
 	}
 }

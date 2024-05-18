@@ -79,8 +79,8 @@ public class Bomber {
         //System.out.println("HIIIII my id is "+id);
     }
     public void dropBomb(){
-        MainGame.bombsAndExplosions.add(new Bomb(posX,posY));
-        System.out.println("Player world pos : " +body.getPosition().x + ",  " +body.getPosition().y);
+        //MainGame.bombsAndExplosions.add(new Bomb(posX,posY));
+        MainGame.gameClient.addBomb(posX,posY,id);
     }
 
     public int getPosX() {

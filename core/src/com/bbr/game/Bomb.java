@@ -18,8 +18,6 @@ public class Bomb {
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
         this.time = time; this.explosionDelay = explosionDelay;
-
-        System.out.println("Bomb : "+posX +", "+posY);
         sprite = new Sprite((texture));
         float SCALE = MainGame.SCALE;
 
@@ -34,7 +32,11 @@ public class Bomb {
         // make the hitbox for the body;
         PolygonShape ps = new PolygonShape();
         ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
-        body.createFixture(ps, 0.0f);
+        FixtureDef fd = new FixtureDef();
+        fd.shape = ps;
+        fd.filter.categoryBits = MainGame.EXPLOSION_BITS;
+        fd.filter.maskBits = 0b0010;
+        body.createFixture(fd);
 
         ps.dispose(); // dispose polyshape because it has overstayed its welcome
         if(batch == null){
@@ -42,7 +44,7 @@ public class Bomb {
         }
     }
     public Bomb(int posX, int posY){
-        this(posX,posY,60,3,3,0);
+        this(posX,posY,60,5,5,0);
     }
     private int animFrame = 0;
     private static final int ANIMAX = 10;

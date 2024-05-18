@@ -1,5 +1,6 @@
 package com.bbr.net;
 
+import com.bbr.game.Bomb;
 import com.bbr.game.Bomber;
 import com.bbr.game.MainGame;
 import com.esotericsoftware.kryonet.Client;
@@ -41,6 +42,13 @@ public class GameClient {
             e.printStackTrace();
         }
     }
+    public void addBomb(int posX, int posY, int bomberID){
+        Network.addBomb ab = new Network.addBomb();
+        ab.posX = posX;
+        ab.posY = posY;
+        ab.bomberID = bomberID;
+        client.sendTCP(ab);
+    }
     public void updatePlayerBomber(Bomber b){
         Network.updateBomber msg = new Network.updateBomber();
         msg.bomberID = b.id;
@@ -49,7 +57,9 @@ public class GameClient {
         client.sendTCP(msg);
     }
     public void updatePlayers(){
+        if(gameState == null) return;
         ArrayList<Network.PlayerRep> apr = gameState.players;
+        ArrayList<Network.addBomb> aab = gameState.newBombs;
         Map<Integer,Bomber> bombers = MainGame.bombers;
         for(int i = 0; i < apr.size(); i++){
             if(! bombers.containsKey(apr.get(i).bomberID)){
@@ -62,6 +72,10 @@ public class GameClient {
                 int id= apr.get(i).bomberID;
                 bombers.get(id).teleport(x,y);
             }
+        }
+        while(!aab.isEmpty()){
+            MainGame.bombsAndExplosions.add(new Bomb(aab.get(0).posX,aab.get(0).posY));
+            aab.remove(0);
         }
     }
     public void joinBomber(Bomber b){

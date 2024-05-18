@@ -117,9 +117,13 @@ public class MainGame extends Game {
 		}
 
 		GameMap.renderer.getBatch().end();
-		if(isServer) gameServer.update(new Network.GameState(apr));
-		if(isServer) gameServer.updatePlayers();
-		else gameClient.updatePlayers();
+		if(isServer) {
+			Network.GameState gs = new Network.GameState(apr);
+			gs.newBombs = gameServer.newBombs;
+			gameServer.newBombs = new ArrayList<>();
+			gameServer.update(gs);
+			gameServer.updatePlayers();
+		} else gameClient.updatePlayers();
 //		batch.begin();
 //		batch.draw(img, 0, 0);
 //		batch.end();

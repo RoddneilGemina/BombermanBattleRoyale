@@ -15,9 +15,11 @@ public class Network {
         kryo.register(ArrayList.class);
         kryo.register(updateBomber.class);
         kryo.register(addBomber.class);
+        kryo.register(addBomb.class);
     }
     public static class GameState{
         public ArrayList<PlayerRep> players;
+        public ArrayList<Network.addBomb> newBombs;
         public GameState(){
             players = new ArrayList<>();
         }
@@ -41,5 +43,8 @@ public class Network {
     }
     public static class addBomber {
         public int posX,posY,bomberID;
+    }
+    public static class addBomb {
+        public int posX, posY, bomberID;
     }
 }
