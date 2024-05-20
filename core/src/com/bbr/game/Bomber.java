@@ -54,11 +54,13 @@ public class Bomber {
     public Body getBody(){return body;}
     int speed = 500;
     public void moveBody(float x, float y){
-        body.applyLinearImpulse(new Vector2(x*speed,y*speed), body.getWorldCenter(), true);
-//        body.applyForceToCenter(x*100,y*100,true);
-        //body.setLinearVelocity(x*speed,y*speed);
-        //body.applyForceToCenter(x*speed,y*speed,true);
-//        System.out.println("Player pos " + body.getPosition());
+        body.applyLinearImpulse(
+                new Vector2(
+                        x*speed,
+                        y*speed),
+                body.getWorldCenter(),
+                true
+        );
     }
     public void teleport(float x, float y){
         body.setTransform(x,y,body.getAngle());
@@ -75,11 +77,16 @@ public class Bomber {
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         batch = (SpriteBatch) GameMap.renderer.getBatch();
-        batch.draw(sprite, body.getPosition().x - MainGame.SCALE/2, body.getPosition().y - MainGame.SCALE/2, 75* MainGame.SCALE/80f, 75* MainGame.SCALE/80f);
-        //System.out.println("HIIIII my id is "+id);
+        batch.draw(
+                sprite,
+                body.getPosition().x - MainGame.SCALE/2,
+                body.getPosition().y - MainGame.SCALE/2,
+                75* MainGame.SCALE/80f,
+                75* MainGame.SCALE/80f
+        );
+
     }
     public void dropBomb(){
-        //MainGame.bombsAndExplosions.add(new Bomb(posX,posY));
         MainGame.gameClient.addBomb(posX,posY,id);
     }
 

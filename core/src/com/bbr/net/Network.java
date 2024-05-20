@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 public class Network {
     public static final int PORT = 42069;
+    private static String ip = "127.0.0.1";
+    public static String getIp(){return ip;}
+    public static void setIp(String ip){Network.ip = ip;}
     public static void register(EndPoint endpoint) {
         Kryo kryo = endpoint.getKryo();
         kryo.register(GameState.class);

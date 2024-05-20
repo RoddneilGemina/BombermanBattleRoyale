@@ -37,7 +37,7 @@ public class GameClient {
         }));
 
         try{
-            client.connect(5000, "127.0.0.1", Network.PORT);
+            client.connect(5000, Network.getIp(), Network.PORT);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -28,7 +28,6 @@ public class GameServer {
                     if(object instanceof Network.updateBomber){
                         Network.updateBomber ub = (Network.updateBomber)object;
                         if(MainGame.bombers.containsKey(ub.bomberID)){
-                            //MainGame.bombers.get(ub.bomberID).teleport(ub.posX,ub.posY);
                             updateQueue.add(new Network.PlayerRep(ub.bomberID,ub.posX,ub.posY));
                         }
                     } else if(object instanceof Network.addBomber){
@@ -54,6 +53,7 @@ public class GameServer {
         while(!updateQueue.isEmpty()){
             try {
                 Network.PlayerRep pr = updateQueue.take();
+                if(MainGame.mainBomber !=null && pr.bomberID==MainGame.mainBomber.id) continue;
                 MainGame.bombers.get(pr.bomberID).teleport(pr.posX,pr.posY);
             } catch (InterruptedException e) {
                 continue;

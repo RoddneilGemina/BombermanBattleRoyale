@@ -8,15 +8,13 @@ import com.bbr.net.GameClient;
 
 public class Controller {
 
-    private static int[] controls = {Input.Keys.A,Input.Keys.D,Input.Keys.W,Input.Keys.S,Input.Keys.H,Input.Keys.J,Input.Keys.K};
+    private static final int[] controls = {Input.Keys.A,Input.Keys.D,Input.Keys.W,Input.Keys.S,Input.Keys.H,Input.Keys.J,Input.Keys.K};
     Bomber bomber;
-    OrthographicCamera cam;
 
 
     public Controller(Bomber bomber){
         this.bomber = bomber;
         GameMap.setBomber(bomber);
-        cam = GameMap.camera;
     }
 
     public void render(){

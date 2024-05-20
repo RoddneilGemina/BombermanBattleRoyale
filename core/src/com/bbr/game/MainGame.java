@@ -18,27 +18,17 @@ public class MainGame extends Game {
 	public static GameClient gameClient;
 	public static GameServer gameServer;
 	public static boolean isServer = false;
-	public MainGame(boolean isServer){
-		MainGame.isServer = isServer;
-	}
-	private void initNetwork(){
-		if(isServer) {
-			gameServer = new GameServer();
-			mainBomber = new Bomber(0);
-			world.destroyBody(mainBomber.getBody());
-			mainBomber = null;
-		} else {
-			gameClient = new GameClient();
-			gameClient.joinBomber(mainBomber);
-		}
-
+	private boolean isPlaying = false;
+	public MainGame(String ip, boolean server, boolean play){
+		MainGame.isServer = server;
+		Network.setIp(ip);
+		isPlaying = play;
 	}
 	public static void addNewBomber(Network.addBomber ab){
 		bombers.put(ab.bomberID, new Bomber(ab.posX, ab.posY, ab.bomberID));
 	}
 	public MainGame(){}
 	SpriteBatch batch;
-	Texture img;
 	GameMap gm;
 
 	public static World world;
@@ -50,40 +40,16 @@ public class MainGame extends Game {
 
 	public static Bomber mainBomber;
 	public static final short EXPLOSION_BITS = 0b01;
+
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		gm = new GameMap();
-		img = new Texture("badlogic.jpg");
 		gm.create();
-		world = new World(new Vector2(0,0),true);
-		for(int r=0; r<11; r++){
-			for(int c=0;c<11;c++){
-				if(GameMap.map[r][c]==0) continue;
-				BodyDef bd = new BodyDef();
-				bd.type = BodyDef.BodyType.StaticBody;
-				bd.position.set((int)(r*SCALE + SCALE/2),(int)(c*SCALE + SCALE/2));
-				Body body = world.createBody(bd);
-				PolygonShape ps = new PolygonShape();
-				ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
-				body.createFixture(ps, 0.0f);
-			}
-		}
+		world = initMap();
 		debugRenderer = new Box2DDebugRenderer();
-//		basil = new Bomber();
-//		GameMap.bomber = basil;
-//		con = new Controller(basil);
-		if(!isServer){
-			int id = 0;
-			do{
-				id = (int)(Math.random()*1000);
-			} while(bombers.containsKey(id));
-			mainBomber = new Bomber(id);
-			bombers.put(id,mainBomber);
-			GameMap.setBomber(mainBomber);
-			con = new Controller(mainBomber);
-		}
+		if(isPlaying) initPlayer();
 		initNetwork();
 }
 
@@ -94,18 +60,7 @@ public class MainGame extends Game {
 		gm.render();
 		if(con!=null) con.render();
 		debugRenderer.render(world,GameMap.camera.combined);
-		if(Bomb.batch != null) {
-			Bomb.batch.begin();
-			for (int i =0; i < bombsAndExplosions.size(); i++) {
-				Object o = bombsAndExplosions.get(i);
-				if (o instanceof Bomb) {
-					((Bomb) o).render();
-				} else if (o instanceof Explosion) {
-					((Explosion) o).render();
-				}
-			}
-			Bomb.batch.end();
-		}
+		renderBombs();
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
 		ArrayList<Network.PlayerRep> apr = null;
 		if(isServer) apr = new ArrayList<>();
@@ -124,14 +79,64 @@ public class MainGame extends Game {
 			gameServer.update(gs);
 			gameServer.updatePlayers();
 		} else gameClient.updatePlayers();
-//		batch.begin();
-//		batch.draw(img, 0, 0);
-//		batch.end();
 	}
 
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+	}
+	private void renderBombs(){
+		if(Bomb.batch != null) {
+			Bomb.batch.begin();
+			for (int i =0; i < bombsAndExplosions.size(); i++) {
+				Object o = bombsAndExplosions.get(i);
+				if (o instanceof Bomb) {
+					((Bomb) o).render();
+				} else if (o instanceof Explosion) {
+					((Explosion) o).render();
+				}
+			}
+			Bomb.batch.end();
+		}
+	}
+	private void initPlayer(){
+		int id = 0;
+		do{
+			id = (int)(Math.random()*1000);
+		} while(bombers.containsKey(id));
+
+		mainBomber = new Bomber(id);
+		bombers.put(id,mainBomber);
+		GameMap.setBomber(mainBomber);
+		con = new Controller(mainBomber);
+	}
+	private void initNetwork(){
+		if(isServer) {
+			gameServer = new GameServer();
+		}
+		if(isPlaying){
+			gameClient = new GameClient();
+			gameClient.joinBomber(mainBomber);
+		} else {
+			mainBomber = new Bomber(0);
+			world.destroyBody(mainBomber.getBody());
+			mainBomber = null;
+		}
+	}
+	public World initMap(){
+		World newWorld = new World(new Vector2(0,0),true);
+		for(int r=0; r<11; r++){
+			for(int c=0;c<11;c++){
+				if(GameMap.map[r][c]==0) continue;
+				BodyDef bd = new BodyDef();
+				bd.type = BodyDef.BodyType.StaticBody;
+				bd.position.set((int)(r*SCALE + SCALE/2),(int)(c*SCALE + SCALE/2));
+				Body body = newWorld.createBody(bd);
+				PolygonShape ps = new PolygonShape();
+				ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
+				body.createFixture(ps, 0.0f);
+			}
+		}
+		return newWorld;
 	}
 }

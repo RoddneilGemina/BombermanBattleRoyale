@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Client" type="Application" factoryName="Application" singleton="false">
+  <configuration default="false" name="Server Player" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="com.bbr.game.DesktopLauncher" />
     <module name="BombermanBattleRoyale.desktop.main" />
-    <option name="PROGRAM_PARAMETERS" value="server=false" />
+    <option name="PROGRAM_PARAMETERS" value="server=true play=true" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

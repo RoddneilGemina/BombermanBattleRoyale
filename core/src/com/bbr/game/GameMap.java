@@ -26,6 +26,7 @@ public class GameMap extends ApplicationAdapter {
             {1,0,0,0,0,0,0,0,0,0,1},
             {1,1,1,1,1,1,1,1,1,1,1}
     };
+    private int mapW = 11, mapH = 11;
     SpriteBatch batch;
     Texture img;
     TiledMap tiledMap;
@@ -37,24 +38,15 @@ public class GameMap extends ApplicationAdapter {
         GameMap.bomber = bomber;
         camera.zoom = 0.125f;
     }
-
     @Override
     public void create () {
         batch = new SpriteBatch();
         img = new Texture("tiles.png");
         tiledMap = new TiledMap();
         MapLayers layers = tiledMap.getLayers();
-        int mapW = 11, mapH = 11;
-        TiledMapTileLayer layer1 = new TiledMapTileLayer(mapW, mapH, 16, 16);
-        for(int r=0; r<mapW; r++){
-            for(int c=0; c<mapH; c++){
-                TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-                TextureRegion tr = new TextureRegion(img,map[r][c]*16,0,16,16);
-                cell.setTile(new StaticTiledMapTile(tr));
-                layer1.setCell(c, r, cell);
-            }
-        }
-        layers.add(layer1);
+
+        layers.add(generateLayer());
+
         renderer= new OrthogonalTiledMapRenderer(tiledMap, (float)(5.0/1.0)* MainGame.SCALE/80f);
         camera = new OrthographicCamera();
 
@@ -66,17 +58,29 @@ public class GameMap extends ApplicationAdapter {
 
     @Override
     public void render () {
-        ScreenUtils.clear(1, 0, 0, 1);
-        camera.update();
-        renderer.setView(camera);
-        renderer.render();
         if(bomber != null){
             camera.position.x = bomber.getBody().getPosition().x;
             camera.position.y = bomber.getBody().getPosition().y;
         }
+        ScreenUtils.clear(1, 0, 0, 1);
+        camera.update();
+        renderer.setView(camera);
+        renderer.render();
+
 
     }
-
+    private TiledMapTileLayer generateLayer() {
+        TiledMapTileLayer layer1 = new TiledMapTileLayer(mapW, mapH, 16, 16);
+        for(int r=0; r<mapW; r++){
+            for(int c=0; c<mapH; c++){
+                TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
+                TextureRegion tr = new TextureRegion(img,map[r][c]*16,0,16,16);
+                cell.setTile(new StaticTiledMapTile(tr));
+                layer1.setCell(c, r, cell);
+            }
+        }
+        return layer1;
+    }
     @Override
     public void dispose () {
         batch.dispose();

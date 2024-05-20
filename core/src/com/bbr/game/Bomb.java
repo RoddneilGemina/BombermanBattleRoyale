@@ -38,10 +38,9 @@ public class Bomb {
         fd.filter.maskBits = 0b0010;
         body.createFixture(fd);
 
-        ps.dispose(); // dispose polyshape because it has overstayed its welcome
-        if(batch == null){
-            batch = new SpriteBatch();
-        }
+        // dispose polyshape because it has overstayed its welcome
+        ps.dispose();
+        if(batch == null) batch = new SpriteBatch();
     }
     public Bomb(int posX, int posY){
         this(posX,posY,60,5,5,0);
@@ -71,16 +70,16 @@ public class Bomb {
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         int maxX = spanX>>1, maxY = spanY>>1;
-        MainGame.bombsAndExplosions.add(new Explosion(posX,posY,20));
+        MainGame.bombsAndExplosions.add(new Explosion(posX,posY,0));
         float scale = MainGame.SCALE;
         for(int i=1;i <= maxX && i <= maxY; i++){
             if(i<=maxX){
-                MainGame.bombsAndExplosions.add(new Explosion((int)(posX+i*scale),posY,20));
-                MainGame.bombsAndExplosions.add(new Explosion((int)(posX-i*scale),posY,20));
+                MainGame.bombsAndExplosions.add(new Explosion((int)(posX+i*scale),posY,20*i));
+                MainGame.bombsAndExplosions.add(new Explosion((int)(posX-i*scale),posY,20*i));
             }
             if(i<=maxY){
-                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY+i*scale),20));
-                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY-i*scale),20));
+                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY+i*scale),20*i));
+                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY-i*scale),20*i));
             }
         }
         dispose();
@@ -102,30 +101,20 @@ class Explosion {
         this.posX = posX;
         this.posY = posY;
         this.time = time;
+
         if(batch == null) batch = Bomb.batch;
         sprite = new Sprite(texture);
         sprite.setRegion(0,0,16,16);
+        body = Common.makeBox(posX,posY);
 
-        float SCALE = MainGame.SCALE;
-        BodyDef bd = new BodyDef();
-        bd.type = BodyDef.BodyType.DynamicBody;
-        //bd.position.set((int)(5*posX*SCALE + SCALE/2),(int)(5*posY*SCALE + SCALE/2));
-        bd.position.set(posX,posY);
-        body = MainGame.world.createBody(bd);
-        PolygonShape ps = new PolygonShape();
-        ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
-        FixtureDef fd = new FixtureDef();
-        fd.shape = ps;
-        fd.filter.categoryBits = MainGame.EXPLOSION_BITS;
-        fd.filter.maskBits = 0b0010;
-        body.createFixture(fd);
-        ps.dispose();
-        if(batch == null){
+
+        if(batch == null)
             batch = new SpriteBatch();
-        }
     }
     int frames = 0;
     public void render(){
+        if(time--> 0) return;
+
         if(frames++ == 10) sprite.setRegion(16,0,16,16);
         if(frames >= 30) dispose();
         batch.setProjectionMatrix(GameMap.camera.combined);
