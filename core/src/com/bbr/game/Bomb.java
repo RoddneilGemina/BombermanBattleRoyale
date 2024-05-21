@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.bbr.game.Utils.BoxUtils;
 
 public class Bomb {
     private Body body;
@@ -105,7 +106,7 @@ class Explosion {
         if(batch == null) batch = Bomb.batch;
         sprite = new Sprite(texture);
         sprite.setRegion(0,0,16,16);
-        body = Common.makeBox(posX,posY);
+        body = BoxUtils.makeBox(posX,posY);
 
 
         if(batch == null)

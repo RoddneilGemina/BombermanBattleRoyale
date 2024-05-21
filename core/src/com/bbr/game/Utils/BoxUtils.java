@@ -1,8 +1,9 @@
-package com.bbr.game;
+package com.bbr.game.Utils;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.bbr.game.MainGame;
 
-public class Common {
+public class BoxUtils {
     public static World world;
     public static Body makeBox(float posX, float posY){
         return makeBox(posX,posY,1.0f);
