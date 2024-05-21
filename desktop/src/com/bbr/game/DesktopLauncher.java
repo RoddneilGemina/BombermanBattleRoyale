@@ -25,7 +25,7 @@ public class DesktopLauncher {
 				else if(param.matches("play"))
 					play = Boolean.parseBoolean(arg);
 			} catch(Exception e){
-				continue;
+				e.printStackTrace();
 			}
 		}
 

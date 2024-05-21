@@ -57,9 +57,6 @@ public class MainGame extends Game {
 		NewGame.setCamera(GameMap.camera);
 		if(isPlaying) initPlayer();
 		initNetwork();
-		ExampleObj obg = new ExampleObj(15,15,1f,1f);
-		//con = new Controller(obg);
-		NewGame.setToBatch(obg,2);
 }
 
 	@Override
@@ -72,7 +69,6 @@ public class MainGame extends Game {
 		debugRenderer.render(world,GameMap.camera.combined); // render hitboxes
 
 		renderBombs(); // render bombs
-		NewGame.render();
 
 		//ignore network stuff
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
@@ -87,6 +83,8 @@ public class MainGame extends Game {
 		}
 		GameMap.renderer.getBatch().end();
 
+
+		NewGame.render();
 
 		if(isServer) {
 			Network.GameState gs = new Network.GameState(apr);

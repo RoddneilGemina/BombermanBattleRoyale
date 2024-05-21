@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.bbr.game.MainGame;
 
 public class BodyBuilder {
-    private float posX, posY, sizeX = 1f, sizeY = 1f, linearDamping, mass;
+    private float posX=0, posY=0, sizeX = 1f, sizeY = 1f, linearDamping=0;
     private boolean sensor;
     private short categoryBits, maskBits;
     private BodyDef.BodyType type = BodyDef.BodyType.DynamicBody;
