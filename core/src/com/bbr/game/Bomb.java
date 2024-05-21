@@ -108,11 +108,16 @@ class Explosion implements Collider {
         if(batch == null) batch = Bomb.batch;
         sprite = new Sprite(texture);
         sprite.setRegion(0,0,16,16);
-        body = new BodyBuilder(posX,posY).userData(this).type(BodyDef.BodyType.StaticBody).categoryBits((short)0b1010).maskBits((short)0b1010).build();
+        body = new BodyBuilder(posX,posY).userData(this).type(BodyDef.BodyType.StaticBody).categoryBits((short)0b1010).maskBits((short)0b1100).build();
 
 
         if(batch == null)
             batch = new SpriteBatch();
+    }
+    public void collide(Object o){
+        while(!MainGame.world.isLocked()) // only execute when world is not updating physics
+            if(o instanceof Bomber)
+                dispose();
     }
     int frames = 0;
     public void render(){

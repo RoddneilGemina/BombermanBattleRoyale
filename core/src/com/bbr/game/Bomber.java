@@ -57,7 +57,7 @@ public class Bomber implements Controllable, Collider {
         fixtureDef.shape = boxShape;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.0f;
-        fixtureDef.filter.categoryBits = 0b1000;
+        fixtureDef.filter.categoryBits = 0b1100;
         fixtureDef.filter.maskBits     = 0b1000;
         body.createFixture(fixtureDef);
         body.setLinearDamping(30f);
