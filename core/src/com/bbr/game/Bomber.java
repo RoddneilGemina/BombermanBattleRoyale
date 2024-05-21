@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.bbr.game.Utils.Controllable;
 
-public class Bomber {
+public class Bomber implements Controllable {
     public int id;
     private Body body;
     private Sprite sprite;
@@ -105,4 +106,9 @@ public class Bomber {
     public void setPosY(int posY) {
         this.posY = posY;
     }
+    public void actionUp(){moveBody(0,1);}
+    public void actionDown(){moveBody(0,-1);}
+    public void actionLeft(){moveBody(-1,0);}
+    public void actionRight(){moveBody(1,0);}
+    public void action1(){dropBomb();}
 }

@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.bbr.game.Utils.GameObj;
+import com.bbr.game.Utils.NewGame;
+import com.bbr.game.Utils.WorldObj;
 import com.bbr.net.GameClient;
 import com.bbr.net.GameServer;
 import com.bbr.net.Network;
@@ -51,6 +54,11 @@ public class MainGame extends Game {
 		debugRenderer = new Box2DDebugRenderer();
 		if(isPlaying) initPlayer();
 		initNetwork();
+		NewGame.init();
+		NewGame.setCamera(GameMap.camera);
+//		ExampleObj obg = new ExampleObj(15,15,1f,1f);
+//		con = new Controller(obg);
+//		NewGame.setToBatch(obg,2);
 }
 
 	@Override
@@ -61,6 +69,7 @@ public class MainGame extends Game {
 		if(con!=null) con.render();
 		debugRenderer.render(world,GameMap.camera.combined);
 		renderBombs();
+		NewGame.render();
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
 		ArrayList<Network.PlayerRep> apr = null;
 		if(isServer) apr = new ArrayList<>();

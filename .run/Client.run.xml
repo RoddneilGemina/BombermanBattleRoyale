@@ -4,7 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="com.bbr.game.DesktopLauncher" />
     <module name="BombermanBattleRoyale.desktop.main" />
-    <option name="PROGRAM_PARAMETERS" value="server=false" />
+    <option name="PROGRAM_PARAMETERS" value="server=false play=true" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
