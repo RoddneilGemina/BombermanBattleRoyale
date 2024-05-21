@@ -52,10 +52,10 @@ public class MainGame extends Game {
 		gm.create();
 		world = initMap();
 		debugRenderer = new Box2DDebugRenderer();
-		if(isPlaying) initPlayer();
-		initNetwork();
 		NewGame.init();
 		NewGame.setCamera(GameMap.camera);
+		if(isPlaying) initPlayer();
+		initNetwork();
 //		ExampleObj obg = new ExampleObj(15,15,1f,1f);
 //		con = new Controller(obg);
 //		NewGame.setToBatch(obg,2);

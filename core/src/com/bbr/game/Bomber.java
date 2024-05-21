@@ -16,6 +16,7 @@ public class Bomber implements Controllable {
     private int posX;
     private int posY;
     private boolean isNPC = true;
+    private HealthDisplay healthDisplay;
     public Bomber(int posX, int posY, int id){
         this.id = id;
         this.posX = posX;
@@ -33,9 +34,8 @@ public class Bomber implements Controllable {
             MassData md = new MassData();
             md.mass = 0.00001f;
             body.setMassData(md);
-
-
         }
+        healthDisplay = new HealthDisplay(this);
     }
 
     public Bomber(int id) {
@@ -51,6 +51,8 @@ public class Bomber implements Controllable {
         body.createFixture(fixtureDef);
         body.setLinearDamping(30f);
         boxShape.dispose();
+
+
     }
     public Body getBody(){return body;}
     int speed = 500;
@@ -88,7 +90,7 @@ public class Bomber implements Controllable {
 
     }
     public void dropBomb(){
-        MainGame.gameClient.addBomb(posX,posY,id);
+        MainGame.gameClient.addBomb((int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),(int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2),id);
     }
 
     public int getPosX() {
