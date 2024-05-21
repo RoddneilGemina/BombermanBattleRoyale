@@ -8,6 +8,7 @@ import com.bbr.game.MainGame;
 
 public class BodyBuilder {
     private float posX, posY, sizeX = 1f, sizeY = 1f, linearDamping, mass;
+    private boolean sensor;
     private short categoryBits, maskBits;
     private BodyDef.BodyType type = BodyDef.BodyType.DynamicBody;
     private Object userData;
@@ -15,6 +16,7 @@ public class BodyBuilder {
         this.posX = posX;
         this.posY = posY;
     }
+    public BodyBuilder sensor(boolean isSensor){sensor=isSensor; return this;}
     public BodyBuilder type(BodyDef.BodyType type){this.type = type; return this;}
     public BodyBuilder posX(float posX){this.posX=posX; return this;}
     public BodyBuilder posY(float posY){this.posY=posY; return this;}
@@ -37,6 +39,7 @@ public class BodyBuilder {
         ps.setAsBox(sizeX*SCALE/2,sizeY*SCALE/2);
 
         FixtureDef fd = new FixtureDef();
+        fd.isSensor = sensor;
         fd.shape = ps;
         fd.filter.categoryBits = categoryBits;
         fd.filter.maskBits = maskBits;
