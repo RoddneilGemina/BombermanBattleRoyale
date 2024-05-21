@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Controllable;
 
-public class Bomber implements Controllable {
+public class Bomber implements Controllable, Collider {
     public int id;
     private Body body;
     private Sprite sprite;
@@ -16,6 +17,7 @@ public class Bomber implements Controllable {
     private int posX;
     private int posY;
     private boolean isNPC = true;
+    private int health = 100;
     private HealthDisplay healthDisplay;
     public Bomber(int posX, int posY, int id){
         this.id = id;
@@ -29,6 +31,8 @@ public class Bomber implements Controllable {
             bodyDef.position.set(posX, posY);
 
             body = MainGame.world.createBody(bodyDef);
+            body.setUserData(this);
+
 
 
             MassData md = new MassData();
@@ -36,6 +40,11 @@ public class Bomber implements Controllable {
             body.setMassData(md);
         }
         healthDisplay = new HealthDisplay(this);
+    }
+    public void collide(Object o){
+        if(o instanceof Explosion){
+            health -= 10;
+        }
     }
 
     public Bomber(int id) {
@@ -48,10 +57,13 @@ public class Bomber implements Controllable {
         fixtureDef.shape = boxShape;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.0f;
+        fixtureDef.filter.categoryBits = 0b1000;
+        fixtureDef.filter.maskBits     = 0b1000;
         body.createFixture(fixtureDef);
         body.setLinearDamping(30f);
         boxShape.dispose();
     }
+    public int getHealth(){return health;}
     public Body getBody(){return body;}
     int speed = 500;
     public void moveBody(float x, float y){

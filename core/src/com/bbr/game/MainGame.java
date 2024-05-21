@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.GameObj;
 import com.bbr.game.Utils.NewGame;
 import com.bbr.game.Utils.WorldObj;
@@ -154,6 +155,31 @@ public class MainGame extends Game {
 				body.createFixture(ps, 0.0f);
 			}
 		}
+		newWorld.setContactListener(new ContactListener() {
+			@Override
+			public void beginContact(Contact contact) {
+				System.out.println("COLLIDED");
+				Object collA = contact.getFixtureA().getBody().getUserData();
+				Object collB = contact.getFixtureB().getBody().getUserData();
+				if(collA instanceof Collider) ((Collider)collA).collide(collB);
+				if(collB instanceof Collider) ((Collider)collB).collide(collA);
+			}
+
+			@Override
+			public void endContact(Contact contact) {
+
+			}
+
+			@Override
+			public void preSolve(Contact contact, Manifold oldManifold) {
+
+			}
+
+			@Override
+			public void postSolve(Contact contact, ContactImpulse impulse) {
+
+			}
+		});
 		return newWorld;
 	}
 }

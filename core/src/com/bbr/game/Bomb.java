@@ -7,7 +7,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.bbr.game.Utils.BoxUtils;
+import com.bbr.game.Utils.BodyBuilder;
+import com.bbr.game.Utils.Collider;
 
 public class Bomb {
     private Body body;
@@ -93,13 +94,13 @@ public class Bomb {
         body = null;
     }
 }
-class Explosion {
+class Explosion implements Collider {
     private Body body;
     private static SpriteBatch batch;
     private static final Texture texture = new Texture("boom.png");
     private Sprite sprite;
     private int posX,posY,time;
-    public Explosion(int posX, int posY, int time) {
+    public Explosion(int posX, int posY, int time){
         this.posX = posX;
         this.posY = posY;
         this.time = time;
@@ -107,7 +108,7 @@ class Explosion {
         if(batch == null) batch = Bomb.batch;
         sprite = new Sprite(texture);
         sprite.setRegion(0,0,16,16);
-        body = BoxUtils.makeBox(posX,posY);
+        body = new BodyBuilder(posX,posY).userData(this).type(BodyDef.BodyType.StaticBody).categoryBits((short)0b1010).maskBits((short)0b1010).build();
 
 
         if(batch == null)

@@ -20,6 +20,7 @@ public class HealthDisplay extends WorldObj {
     }
 
     public void render() {
+        hp = bomber.getHealth();
         font.draw(batch, hp.toString(), bomber.getPosX() - 3, bomber.getPosY() + 7);
     }
 }
