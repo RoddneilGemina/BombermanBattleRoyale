@@ -31,6 +31,7 @@ public class Bomb {
 
         // make a physical box2d body in the box2d world
         body = MainGame.world.createBody(bd);
+        body.setUserData(this);
 
         // make the hitbox for the body;
         PolygonShape ps = new PolygonShape();

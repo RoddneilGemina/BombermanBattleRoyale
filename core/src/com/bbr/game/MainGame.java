@@ -158,7 +158,6 @@ public class MainGame extends Game {
 		newWorld.setContactListener(new ContactListener() {
 			@Override
 			public void beginContact(Contact contact) {
-				System.out.println("COLLIDED");
 				Object collA = contact.getFixtureA().getBody().getUserData();
 				Object collB = contact.getFixtureB().getBody().getUserData();
 				if(collA instanceof Collider) ((Collider)collA).collide(collB);

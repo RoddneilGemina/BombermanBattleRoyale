@@ -11,9 +11,9 @@ public class DesktopLauncher {
 		config.setTitle("BombermanBattleRoyale");
 		config.setWindowSizeLimits(640,480,640,480);
 		config.setResizable(false);
-		String ip = "127.0.0.1";
-		boolean server = true;
-		boolean play = true;
+		String ip = "127.0.0.1";  // the ip address if connecting to a server
+		boolean server = true;    // true if the application will run a server
+		boolean play = true;      // true if you want a playable bomber, false if spectating
 		for(String s : args){
 			try{
 				String param = s.split("=")[0];
