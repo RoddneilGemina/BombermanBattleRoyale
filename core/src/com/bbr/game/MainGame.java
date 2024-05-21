@@ -56,31 +56,37 @@ public class MainGame extends Game {
 		NewGame.setCamera(GameMap.camera);
 		if(isPlaying) initPlayer();
 		initNetwork();
-//		ExampleObj obg = new ExampleObj(15,15,1f,1f);
-//		con = new Controller(obg);
-//		NewGame.setToBatch(obg,2);
+		ExampleObj obg = new ExampleObj(15,15,1f,1f);
+		//con = new Controller(obg);
+		NewGame.setToBatch(obg,2);
 }
 
 	@Override
 	public void render () {
-		world.step(1/60f,6,2);
-		ScreenUtils.clear(0, 0, 0, 1);
-		gm.render();
-		if(con!=null) con.render();
-		debugRenderer.render(world,GameMap.camera.combined);
-		renderBombs();
+		world.step(1/60f,6,2); //update physics
+		ScreenUtils.clear(0, 0, 0, 1);	// clear screen
+		gm.render();	// render map
+		if(con!=null) con.render(); // update controller
+
+		debugRenderer.render(world,GameMap.camera.combined); // render hitboxes
+
+		renderBombs(); // render bombs
 		NewGame.render();
+
+		//ignore network stuff
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
 		ArrayList<Network.PlayerRep> apr = null;
 		if(isServer) apr = new ArrayList<>();
+
 		GameMap.renderer.getBatch().begin();
 		for(int i = 0; i < keys.length; i++){
 			Bomber curr = bombers.get(keys[i]);
 			curr.render();
 			if(isServer) apr.add(new Network.PlayerRep(keys[i],curr.getPosX(),curr.getPosY()));
 		}
-
 		GameMap.renderer.getBatch().end();
+
+
 		if(isServer) {
 			Network.GameState gs = new Network.GameState(apr);
 			gs.newBombs = gameServer.newBombs;
@@ -137,9 +143,11 @@ public class MainGame extends Game {
 		for(int r=0; r<11; r++){
 			for(int c=0;c<11;c++){
 				if(GameMap.map[r][c]==0) continue;
+
 				BodyDef bd = new BodyDef();
 				bd.type = BodyDef.BodyType.StaticBody;
 				bd.position.set((int)(r*SCALE + SCALE/2),(int)(c*SCALE + SCALE/2));
+
 				Body body = newWorld.createBody(bd);
 				PolygonShape ps = new PolygonShape();
 				ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));

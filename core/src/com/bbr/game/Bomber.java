@@ -51,8 +51,6 @@ public class Bomber implements Controllable {
         body.createFixture(fixtureDef);
         body.setLinearDamping(30f);
         boxShape.dispose();
-
-
     }
     public Body getBody(){return body;}
     int speed = 500;

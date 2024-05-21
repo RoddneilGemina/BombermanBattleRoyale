@@ -19,6 +19,7 @@ public class Bomb {
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
         this.time = time; this.explosionDelay = explosionDelay;
+
         sprite = new Sprite((texture));
         float SCALE = MainGame.SCALE;
 

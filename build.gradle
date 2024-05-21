@@ -73,7 +73,6 @@ project(":html") {
         api "com.kotcrab.vis:vis-ui:1.4.11:sources"
         implementation 'com.esotericsoftware:kryo:5.2.0'
         implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
-        
     }
 }
 
