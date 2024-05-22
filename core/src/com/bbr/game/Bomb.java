@@ -109,13 +109,7 @@ class Explosion implements Collider {
         if(batch == null) batch = Bomb.batch;
         sprite = new Sprite(texture);
         sprite.setRegion(0,0,16,16);
-        body = new BodyBuilder(posX,posY)
-                .userData(this)
-                .type(BodyDef.BodyType.StaticBody)
-                .categoryBits((short)0b1010)
-                .maskBits((short)0b1100)
-                .sensor(true)
-                .build();
+
 
 
         if(batch == null)
@@ -130,10 +124,19 @@ class Explosion implements Collider {
     public void render(){
         if(time--> 0) return;
 
-        if(frames++ == 10) sprite.setRegion(16,0,16,16);
+        if(frames++ == 10) {
+            sprite.setRegion(16, 0, 16, 16);
+            body = new BodyBuilder(posX,posY)
+                    .userData(this)
+                    .type(BodyDef.BodyType.StaticBody)
+                    .categoryBits((short)0b1010)
+                    .maskBits((short)0b1100)
+                    .sensor(true)
+                    .build();
+        }
         if(frames >= 30) dispose();
         batch.setProjectionMatrix(GameMap.camera.combined);
-        if(sprite!=null) batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
+        if(sprite!=null) batch.draw(sprite, (posX - MainGame.SCALE/2), (posY - MainGame.SCALE/2),
                 80* MainGame.SCALE/80f, 80* MainGame.SCALE/80f);
     }
     public void dispose(){
