@@ -4,8 +4,6 @@
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 	<inherits name='com.badlogic.gdx.physics.box2d.box2d-gwt' />
 	<inherits name='com.badlogic.ashley_gwt' />
-	<inherits name='com.esotericsoftware:kryo:5.2.0'/>
-	<inherits name='com.esotericsoftware:kryonet:2.22.0-RC1'/>
 	<inherits name='com.kotcrab.vis.vis-ui' />
 
 	<inherits name='BombermanBattleRoyaleGame' />

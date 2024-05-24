@@ -33,8 +33,6 @@ public class Bomber implements Controllable, Collider {
             body = MainGame.world.createBody(bodyDef);
             body.setUserData(this);
 
-
-
             MassData md = new MassData();
             md.mass = 0.00001f;
             body.setMassData(md);
@@ -99,7 +97,13 @@ public class Bomber implements Controllable, Collider {
 
     }
     public void dropBomb(){
-        MainGame.gameClient.addBomb((int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),(int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2),id);
+        MainGame.bombsAndExplosions.add(
+                new Bomb(
+                        (int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),
+                        (int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2)
+                )
+        );
+//        MainGame.gameClient.addBomb((int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),(int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2),id);
     }
 
     public int getPosX() {

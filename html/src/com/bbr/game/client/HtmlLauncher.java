@@ -17,6 +17,9 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener createApplicationListener () {
-                return new MainGame();
+                String ip = "127.0.0.1";  // the ip address if connecting to a server
+                boolean server = true;    // true if the application will run a server
+                boolean play = true;      // true if you want a playable bomber, false if spectating
+                return new MainGame(ip,server,play);
         }
 }

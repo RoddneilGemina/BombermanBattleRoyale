@@ -10,9 +10,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.bbr.game.Utils.BodyBuilder;
 import com.bbr.game.Utils.Collider;
 
-public class Bomb {
-    private Body body;
-    private Sprite sprite;
+import java.io.Serializable;
+
+public class Bomb implements Serializable {
+    private int id = -1;
+    private transient Body body;
+    private transient Sprite sprite;
     public static SpriteBatch batch;
     private static final Texture texture = new Texture("bomb.png");
     private int time, posX,posY,spanX, spanY, explosionDelay;
@@ -20,6 +23,8 @@ public class Bomb {
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
         this.time = time; this.explosionDelay = explosionDelay;
+        // TEMPORARY ! ! !
+        id = (int)Math.round(Math.random()*2000);
 
         sprite = new Sprite((texture));
         float SCALE = MainGame.SCALE;

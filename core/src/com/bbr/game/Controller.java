@@ -2,21 +2,19 @@ package com.bbr.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.bbr.game.Utils.Controllable;
-import com.bbr.net.GameClient;
 
 public class Controller {
 
     private static final int[] controls = {
-            Input.Keys.A,
-            Input.Keys.D,
-            Input.Keys.W,
-            Input.Keys.S,
-            Input.Keys.H,
-            Input.Keys.J,
-            Input.Keys.K
+            Input.Keys.A,// LEFT
+            Input.Keys.D,// RIGHT
+            Input.Keys.W,// UP
+            Input.Keys.S,// DOWN
+            Input.Keys.H,// ACTION 1
+            Input.Keys.J,// ACTION 2
+            Input.Keys.K,// ACTION 3
+            Input.Keys.L // ACTION 4
     };
     Controllable controled;
 
@@ -33,6 +31,6 @@ public class Controller {
         if(Gdx.input.isKeyPressed(controls[3])) controled.actionDown();
         if(Gdx.input.isKeyJustPressed(controls[4])) controled.action1();
 
-        if(controled instanceof Bomber) MainGame.gameClient.updatePlayerBomber((Bomber) controled);
+        //if(controled instanceof Bomber) MainGame.gameClient.updatePlayerBomber((Bomber) controled);
     }
 }

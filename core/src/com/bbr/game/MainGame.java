@@ -1,36 +1,30 @@
 package com.bbr.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.bbr.game.Utils.Collider;
-import com.bbr.game.Utils.GameObj;
 import com.bbr.game.Utils.NewGame;
-import com.bbr.game.Utils.WorldObj;
-import com.bbr.net.GameClient;
-import com.bbr.net.GameServer;
-import com.bbr.net.Network;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainGame extends Game {
-	public static GameClient gameClient;
-	public static GameServer gameServer;
+//	public static GameClientOLD gameClient;
+//	public static GameServerOLD gameServer;
 	public static boolean isServer = false;
 	private boolean isPlaying = false;
 	public MainGame(String ip, boolean server, boolean play){
 		MainGame.isServer = server;
-		Network.setIp(ip);
+		//NetworkOLD.setIp(ip);
 		isPlaying = play;
 	}
-	public static void addNewBomber(Network.addBomber ab){
-		bombers.put(ab.bomberID, new Bomber(ab.posX, ab.posY, ab.bomberID));
-	}
+//	public static void addNewBomber(NetworkOLD.addBomber ab){
+//		bombers.put(ab.bomberID, new Bomber(ab.posX, ab.posY, ab.bomberID));
+//	}
 	public MainGame(){}
 	SpriteBatch batch;
 	GameMap gm;
@@ -56,7 +50,7 @@ public class MainGame extends Game {
 		NewGame.init();
 		NewGame.setCamera(GameMap.camera);
 		if(isPlaying) initPlayer();
-		initNetwork();
+//		initNetwork();
 }
 
 	@Override
@@ -72,27 +66,27 @@ public class MainGame extends Game {
 
 		//ignore network stuff
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
-		ArrayList<Network.PlayerRep> apr = null;
-		if(isServer) apr = new ArrayList<>();
+//		ArrayList<NetworkOLD.PlayerRep> apr = null;
+//		if(isServer) apr = new ArrayList<>();
 
 		GameMap.renderer.getBatch().begin();
 		for(int i = 0; i < keys.length; i++){
 			Bomber curr = bombers.get(keys[i]);
 			curr.render();
-			if(isServer) apr.add(new Network.PlayerRep(keys[i],curr.getPosX(),curr.getPosY()));
+			//if(isServer) apr.add(new NetworkOLD.PlayerRep(keys[i],curr.getPosX(),curr.getPosY()));
 		}
 		GameMap.renderer.getBatch().end();
 
 
 		NewGame.render();
 
-		if(isServer) {
-			Network.GameState gs = new Network.GameState(apr);
-			gs.newBombs = gameServer.newBombs;
-			gameServer.newBombs = new ArrayList<>();
-			gameServer.update(gs);
-			gameServer.updatePlayers();
-		} else gameClient.updatePlayers();
+//		if(isServer) {
+//			NetworkOLD.GameState gs = new NetworkOLD.GameState(apr);
+//			gs.newBombs = gameServer.newBombs;
+//			gameServer.newBombs = new ArrayList<>();
+//			gameServer.update(gs);
+//			gameServer.updatePlayers();
+//		} else gameClient.updatePlayers();
 	}
 
 	@Override
@@ -124,19 +118,19 @@ public class MainGame extends Game {
 		GameMap.setBomber(mainBomber);
 		con = new Controller(mainBomber);
 	}
-	private void initNetwork(){
-		if(isServer) {
-			gameServer = new GameServer();
-		}
-		if(isPlaying){
-			gameClient = new GameClient();
-			gameClient.joinBomber(mainBomber);
-		} else {
-			mainBomber = new Bomber(0);
-			world.destroyBody(mainBomber.getBody());
-			mainBomber = null;
-		}
-	}
+//	private void initNetwork(){
+//		if(isServer) {
+//			gameServer = new GameServerOLD();
+//		}
+//		if(isPlaying){
+//			gameClient = new GameClientOLD();
+//			gameClient.joinBomber(mainBomber);
+//		} else {
+//			mainBomber = new Bomber(0);
+//			world.destroyBody(mainBomber.getBody());
+//			mainBomber = null;
+//		}
+//	}
 	public World initMap(){
 		World newWorld = new World(new Vector2(0,0),true);
 		for(int r=0; r<11; r++){
@@ -161,21 +155,12 @@ public class MainGame extends Game {
 				if(collA instanceof Collider) ((Collider)collA).collide(collB);
 				if(collB instanceof Collider) ((Collider)collB).collide(collA);
 			}
-
 			@Override
-			public void endContact(Contact contact) {
-
-			}
-
+			public void endContact(Contact contact) {}
 			@Override
-			public void preSolve(Contact contact, Manifold oldManifold) {
-
-			}
-
+			public void preSolve(Contact contact, Manifold oldManifold) {}
 			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {
-
-			}
+			public void postSolve(Contact contact, ContactImpulse impulse) {}
 		});
 		return newWorld;
 	}
