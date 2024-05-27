@@ -30,6 +30,7 @@ public class Controller {
         if(Gdx.input.isKeyPressed(controls[2])) controled.actionUp();
         if(Gdx.input.isKeyPressed(controls[3])) controled.actionDown();
         if(Gdx.input.isKeyJustPressed(controls[4])) controled.action1();
+        if(Gdx.input.isKeyJustPressed(controls[5])) controled.action2();
 
         //if(controled instanceof Bomber) MainGame.gameClient.updatePlayerBomber((Bomber) controled);
     }

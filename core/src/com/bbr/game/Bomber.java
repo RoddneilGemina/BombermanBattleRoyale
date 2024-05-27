@@ -15,6 +15,7 @@ public class Bomber implements Controllable, Collider {
     public int id;
     private Body body;
     private Sprite sprite;
+    private Vector2 direction;
     private static Texture texture = null;
     public static SpriteBatch batch;
     private int posX;
@@ -28,6 +29,7 @@ public class Bomber implements Controllable, Collider {
         this.posY = posY;
         if(texture == null) texture = new Texture("bomber.png");
         sprite = new Sprite(texture);
+        direction = new Vector2(1,1);
         if(true){
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -90,6 +92,10 @@ public class Bomber implements Controllable, Collider {
         }
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
+        //Vector2 lastDir = direction.cpy();
+        direction = body.getLinearVelocity();
+        direction.nor();
+        //if(direction.x == 0 && direction.y ==0) direction = lastDir;
         batch = (SpriteBatch) GameMap.renderer.getBatch();
         batch.draw(
                 sprite,
@@ -98,7 +104,7 @@ public class Bomber implements Controllable, Collider {
                 75* MainGame.SCALE/80f,
                 75* MainGame.SCALE/80f
         );
-
+        //Console.print("VX: "+direction.x + "VY: "+direction.y);
     }
     public void dropBomb(){
 //        if(MainGame.gameService!=null && MainGame.gameService.getType().matches("client")){
@@ -114,6 +120,7 @@ public class Bomber implements Controllable, Collider {
 //                }
 //            });
 //        }
+
 
         Renderer.setToBatch(
                 new Bomb(
@@ -144,4 +151,7 @@ public class Bomber implements Controllable, Collider {
     public void actionLeft(){moveBody(-1,0);}
     public void actionRight(){moveBody(1,0);}
     public void action1(){dropBomb();}
+    public void action2(){new Dash().doAction(this);}
+    public Vector2 getDirection(){return direction;}
+    public void setDirection(Vector2 dir){this.direction = dir;}
 }
