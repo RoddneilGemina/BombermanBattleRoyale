@@ -61,6 +61,7 @@ public class Renderer {
     public static void removeFromBatches( GameObj o){
         for(int i=0; i<NUMBER_OF_LAYERS; i++)
             objectBatches.get(i).remove(o);
+        screenBatchObjects.remove(o);
     }
 
 }

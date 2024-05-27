@@ -53,4 +53,9 @@ public class ItemDisplay extends ScreenObj {
             );
         }
     }
+    public void dispose(){
+        super.dispose();
+        texture.dispose();
+        Renderer.removeFromBatches(this);
+    }
 }

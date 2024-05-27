@@ -6,7 +6,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.bbr.game.Utils.GameObj;
 import com.bbr.game.Utils.Renderer;
 import com.bbr.game.Utils.WorldObj;
-import com.bbr.game.shared.NetServiceAsync;
+import com.bbr.net.GameClient;
+import com.bbr.net.GameServer;
+import com.bbr.net.Network;
 //import com.bbr.game.shared.NetInterface;
 
 import java.util.ArrayList;
@@ -15,15 +17,15 @@ import java.util.Map;
 
 public class MainGame extends Game {
 	public static boolean isServer = false;
-	private boolean isPlaying = false;
-	public static NetServiceAsync netass;
+	public static boolean isPlaying = false;
+	public static GameClient gameClient;
+	public static GameServer gameServer;
 	public static ArrayList<Body> disposeList = new ArrayList<>();
-	public MainGame(String ip, boolean server, boolean play, NetServiceAsync netass){
-		this.netass = netass;
+	public MainGame(String ip, boolean server, boolean play){
 		MainGame.isServer = server;
-		//NetworkOLD.setIp(ip);
+		Network.setIp(ip);
 		isPlaying = play;
-		//gameService = net;
+
 	}
 	public MainGame(){}
 	GameMap gm;
@@ -47,6 +49,7 @@ public class MainGame extends Game {
 		Renderer.init();
 		Renderer.setCamera(GameMap.camera);
 		if(isPlaying) initPlayer();
+		initNetwork();
 		ItemSpawner.spawnItem(10);
 }
 
@@ -63,19 +66,32 @@ public class MainGame extends Game {
 
 		Renderer.render();
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
+		ArrayList<Network.PlayerRep> apr = null;
+		if(isServer) apr = new ArrayList<>();
 
 		GameMap.renderer.getBatch().begin();
 		for(int i = 0; i < keys.length; i++){
 			Bomber curr = bombers.get(keys[i]);
 			curr.render();
+			if(isServer) apr.add(new Network.PlayerRep(keys[i],curr.getPosX(),curr.getPosY()));
+
 		}
 		GameMap.renderer.getBatch().end();
 		Renderer.renderScreen();
+
+		if(isServer) {
+			Network.GameState gs = new Network.GameState(apr);
+			gs.newBombs = gameServer.newBombs;
+			gameServer.newBombs = new ArrayList<>();
+			gameServer.update(gs);
+			gameServer.updatePlayers();
+		} else gameClient.updatePlayers();
+
 		if(!world.isLocked())
-		while(!disposeList.isEmpty()){
-			world.destroyBody(disposeList.get(0));
-			disposeList.remove(0);
-		}
+			while(!disposeList.isEmpty()){
+				world.destroyBody(disposeList.get(0));
+				disposeList.remove(0);
+			}
 
 	}
 
@@ -94,5 +110,18 @@ public class MainGame extends Game {
 		GameMap.setBomber(mainBomber);
 		con = new Controller(mainBomber);
 	}
-
+	private void initNetwork(){
+		if(isServer) {
+			gameServer = new GameServer();
+		}
+		if(isPlaying){
+			gameClient = new GameClient();
+			gameClient.joinBomber(mainBomber);
+		} else {
+			mainBomber = new Bomber(0);
+			world.destroyBody(mainBomber.getBody());
+			mainBomber.removeDisplays();
+			mainBomber = null;
+		}
+	}
 }

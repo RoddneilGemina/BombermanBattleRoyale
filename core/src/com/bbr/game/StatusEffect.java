@@ -13,7 +13,8 @@ public abstract class StatusEffect extends Thread{
         try {
             Thread.sleep(duration);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            effectEnd();
+            dispose();
         }
         effectEnd();
         dispose();

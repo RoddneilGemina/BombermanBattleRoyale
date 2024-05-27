@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Controllable;
 import com.bbr.game.Utils.Renderer;
+import com.bbr.net.Network;
+import jdk.tools.jmod.Main;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -20,8 +22,8 @@ public class Bomber implements Controllable, Collider {
     private Vector2 direction;
     private static Texture texture = null;
     public static SpriteBatch batch;
-    private int posX;
-    private int posY;
+    private float posX;
+    private float posY;
     private boolean isNPC = true;
     private int health = 100;
     private HealthDisplay healthDisplay;
@@ -37,7 +39,7 @@ public class Bomber implements Controllable, Collider {
         effects = new ArrayList<>();
         lives = 3;
         inventory = new ArrayList<>();
-        //linventory.add(new SmallBomb());
+        inventory.add(new SmallBomb());
         skill = new Dash();
         this.id = id;
         this.posX = posX;
@@ -59,8 +61,7 @@ public class Bomber implements Controllable, Collider {
             md.mass = 0.00001f;
             body.setMassData(md);
         }
-        healthDisplay = new HealthDisplay(this);
-        itemDisplay = new ItemDisplay(this);
+
     }
     public void collide(Object o){
         if(o instanceof Explosion && canGetHit()){
@@ -78,6 +79,8 @@ public class Bomber implements Controllable, Collider {
     public Bomber(int id) {
         this((int)(MainGame.SCALE + MainGame.SCALE/2),(int)(MainGame.SCALE + MainGame.SCALE/2),id);
         isNPC = false;
+        healthDisplay = new HealthDisplay(this);
+        itemDisplay = new ItemDisplay(this);
 
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(0.25f * MainGame.SCALE, 0.25f * MainGame.SCALE);
@@ -106,7 +109,19 @@ public class Bomber implements Controllable, Collider {
         );
     }
     public void teleport(float x, float y){
-        body.setTransform(x,y,body.getAngle());
+        float x0 = body.getPosition().x;
+        float y0 = body.getPosition().y;
+        body.setTransform((x+x0)/2,(y+y0)/2,body.getAngle());
+        direction.x = 100*(body.getPosition().x - x0);
+        direction.y = 100*(body.getPosition().y - y0);
+    }
+    public void unpack(Network.PlayerRep pr){
+        float x0 = body.getPosition().x;
+        float y0 = body.getPosition().y;
+        body.setTransform((pr.posX+x0)/2,(pr.posY+y0)/2,body.getAngle());
+        direction.x = pr.dirX;
+        direction.y = pr.dirY;
+        health = pr.health;
     }
     int framedex = 1;
     int dirindex = 1;
@@ -115,15 +130,13 @@ public class Bomber implements Controllable, Collider {
     private static final int FRAMEMAX = 7;
     public void render()
     {
-        if(direction.y > 0.4f)
-            dirindex = 0;
-        else if(direction.x > 0.6f)
-            dirindex = 3;
-        else if(direction.x < -0.6f)
-            dirindex = 2;
-        else
-            dirindex = 1;
-        if(body.getLinearVelocity().len() > 0.2f){
+        if(isNPC){
+            //Console.print(""+direction.x+" "+direction.y);
+        } else {
+            direction = body.getLinearVelocity();
+            direction.nor();
+        }
+        if((isNPC) ||body.getLinearVelocity().len() > 0.2f){
             if(framectr++>=FRAMEMAX){
                 framedex+=framedir;
                 if(framedex!=1) framedir*=-1;
@@ -132,11 +145,19 @@ public class Bomber implements Controllable, Collider {
         } else {
             framedex = 1;
         }
+        if(direction.y > 0.4f)
+            dirindex = 0;
+        else if(direction.x > 0.6f)
+            dirindex = 3;
+        else if(direction.x < -0.6f)
+            dirindex = 2;
+        else
+            dirindex = 1;
+
         sprite.setRegion(16*framedex,25*dirindex,16,25);
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
-        direction = body.getLinearVelocity();
-        direction.nor();
+
         effectsDuring();
         sprite.setCenter(body.getPosition().x,body.getPosition().y+2);
         sprite.draw(batch);
@@ -147,21 +168,24 @@ public class Bomber implements Controllable, Collider {
 //                width* MainGame.SCALE/80f,
 //                height* MainGame.SCALE/80f
 //        );
+        if(MainGame.gameClient!=null){
+            MainGame.gameClient.updatePlayerBomber(this);
+        }
     }
 
-    public int getPosX() {
+    public float getPosX() {
         return posX;
     }
 
-    public void setPosX(int posX) {
+    public void setPosX(float posX) {
         this.posX = posX;
     }
 
-    public int getPosY() {
+    public float getPosY() {
         return posY;
     }
 
-    public void setPosY(int posY) {
+    public void setPosY(float posY) {
         this.posY = posY;
     }
     public void actionUp(){moveBody(0,1);}
@@ -215,7 +239,7 @@ public class Bomber implements Controllable, Collider {
     public int getSelectedIndex(){
         return inventoryIndex;
     }
-    private ArrayList<StatusEffect> effects;
+    private final ArrayList<StatusEffect> effects;
     public void addStatusEffect(StatusEffect se){
         synchronized (effects){
             effects.add(se);
@@ -231,4 +255,17 @@ public class Bomber implements Controllable, Collider {
         }
     }
     public Sprite getSprite(){return sprite;}
+    public Network.PlayerRep pack(){
+        Network.PlayerRep pr = new Network.PlayerRep();
+        pr.posX = posX;
+        pr.posY = posY;
+        pr.health = health;
+        pr.dirX = direction.x;
+        pr.dirY = direction.y;
+        return pr;
+    }
+    public void removeDisplays(){
+        if(healthDisplay!=null) healthDisplay.dispose();
+        if(itemDisplay!=null) itemDisplay.dispose();
+    }
 }

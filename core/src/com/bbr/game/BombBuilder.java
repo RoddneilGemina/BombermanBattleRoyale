@@ -1,7 +1,7 @@
 package com.bbr.game;
 
 public class BombBuilder {
-    private int posX, posY;
+    private float posX, posY;
     private int time = 60;
     private int spanX = 3;
     private int spanY = 3;
@@ -10,8 +10,12 @@ public class BombBuilder {
     private float damageMultiplier = 1;
     private int damage = 10;
     private boolean snap = true;
+    public BombBuilder(){
+        posX = 100;
+        posY = 100;
+    }
 
-    public BombBuilder(int posX, int posY) {
+    public BombBuilder(float posX, float posY) {
         this.posX = posX;
         this.posY = posY;
     }
@@ -52,13 +56,27 @@ public class BombBuilder {
     }
     public BombBuilder setDamageAdder(int damageAdd){this.damageAdder=damageAdd; return this;}
     public BombBuilder setDamageMultiplier(float multiplier){this.damageMultiplier=multiplier; return this;}
-
+    public float getPosX(){
+        return posX;
+    }
+    public float getPosY(){
+        return posY;
+    }
 
     public Bomb build() {
         if(snap) {
             posX = (int) (10 * Math.round((posX - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2);
             posY = (int) (10 * Math.round((posY - MainGame.SCALE + 3) / 10) + MainGame.SCALE / 2);
         }
-        return new Bomb(posX, posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder));
+        Bomb bomb = new Bomb((int)posX, (int)posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder));
+        if(!MainGame.isServer) MainGame.gameClient.addBomb(this,0);
+        return bomb;
+    }
+    public Bomb buildNoNet(){
+        if(snap) {
+            posX = (int) (10 * Math.round((posX - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2);
+            posY = (int) (10 * Math.round((posY - MainGame.SCALE + 3) / 10) + MainGame.SCALE / 2);
+        }
+        return new Bomb((int)posX, (int)posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder));
     }
 }

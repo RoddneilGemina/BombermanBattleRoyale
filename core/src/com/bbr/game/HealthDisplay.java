@@ -32,4 +32,9 @@ public class HealthDisplay extends ScreenObj {
                 false
         );
     }
+    public void dispose(){
+        super.dispose();
+        font.dispose();
+        Renderer.removeFromBatches(this);
+    }
 }
