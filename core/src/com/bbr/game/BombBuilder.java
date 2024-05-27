@@ -14,29 +14,40 @@ public class BombBuilder {
         this.posY = posY;
     }
 
-    public void setTime(int time) {
+    public BombBuilder setTime(int time) {
         this.time = time;
+        return this;
     }
 
-    public void setSpan(int span) {
+    public BombBuilder setSpan(int span) {
         spanX = span;
         spanY = span;
+        return this;
     }
 
-    public void setSpanX(int spanX) {
+    public BombBuilder setSpanX(int spanX) {
         this.spanX = spanX;
+        return this;
     }
 
-    public void setSpanY(int spanY) {
+    public BombBuilder setSpanY(int spanY) {
         this.spanY = spanY;
+        return this;
     }
-    public void setDamage(int damage){this.damage = damage;}
+    public BombBuilder setDamage(int damage){
+        this.damage = damage;
+        return this;
+    }
     public int getDamage(){return damage;}
 
-    public void setExplosionDelay(int explosionDelay) {
+    public BombBuilder setExplosionDelay(int explosionDelay) {
         this.explosionDelay = explosionDelay;
+        return this;
+
     }
-    public void setCenter(boolean snap){this.snap = snap;}
+    public BombBuilder setCenter(boolean snap){this.snap = snap;
+        return this;
+    }
 
     public Bomb build() {
         if(snap) {

@@ -33,8 +33,6 @@ public class Bomber implements Controllable, Collider {
     public Bomber(int posX, int posY, int id){
         lives = 3;
         inventory = new ArrayList<>();
-        inventory.add(new SpawnItem());
-        inventory.add(new Heal());
         inventory.add(new SmallBomb());
         inventoryIndex = 1;
         skill = new Dash();

@@ -38,8 +38,16 @@ class SmallBoxBomb extends OffenseAction {
 }
 
 class MediumCrossBomb extends OffenseAction {
-    public void doAction(Bomber b) {
-
+    public MediumCrossBomb(){
+        count = 1;
+        this.rX = 2;
+        this.rY = 0;
+    }
+    public void doAction(Bomber b){
+        Renderer.setToBatch(
+                new BombBuilder(b.getPosX(),b.getPosY()).setSpan(5).build()
+                ,3
+        );
     }
 }
 
@@ -50,8 +58,16 @@ class MediumXBomb extends OffenseAction {
 }
 
 class MediumBoxBomb extends OffenseAction {
-    public void doAction(Bomber b) {
-
+    public MediumBoxBomb(){
+        count = 1;
+        this.rX = 2;
+        this.rY = 0;
+    }
+    public void doAction(Bomber b){
+        Renderer.setToBatch(
+                new BombBuilder(b.getPosX(),b.getPosY()).build()
+                ,3
+        );
     }
 }
 
