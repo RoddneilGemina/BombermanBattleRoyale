@@ -57,57 +57,5 @@ class IceTrap extends UtilityAction {
     }
 }
 
-class SmallCrossBomb extends UtilityAction {
-    public void doAction(Bomber b) {
 
-    }
-}
-
-class SmallXBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
-
-class SmallBoxBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
-
-class MediumCrossBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
-
-class MediumXBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
-
-class MediumBoxBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
-
-class LargeCrossBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
-
-class LargeXBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
-
-class LargeBoxBomb extends UtilityAction {
-    public void doAction(Bomber b) {
-
-    }
-}
 

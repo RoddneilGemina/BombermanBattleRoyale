@@ -19,4 +19,56 @@ class SmallBomb extends OffenseAction{
     }
 }
 
+class SmallCrossBomb extends OffenseAction {
+    public void doAction(Bomber b) {
 
+    }
+}
+
+class SmallXBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
+
+class SmallBoxBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
+
+class MediumCrossBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
+
+class MediumXBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
+
+class MediumBoxBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
+
+class LargeCrossBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
+
+class LargeXBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
+
+class LargeBoxBomb extends OffenseAction {
+    public void doAction(Bomber b) {
+
+    }
+}
