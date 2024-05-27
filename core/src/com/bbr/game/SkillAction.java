@@ -12,3 +12,12 @@ class Dash extends SkillAction {
         b.getBody().setLinearDamping(30f);
     }
 }
+
+class Stasis extends UtilityAction {
+    int shieldValue = 100;
+    public void doAction(Bomber b){
+        //go stasis mode
+    }
+}
+
+
