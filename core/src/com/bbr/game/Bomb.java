@@ -2,23 +2,25 @@ package com.bbr.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.bbr.game.Utils.BodyBuilder;
-import com.bbr.game.Utils.Collider;
+import com.bbr.game.Utils.GameObj;
+import com.bbr.game.Utils.Renderer;
+import com.bbr.game.Explosion;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Bomb implements Serializable {
+public class Bomb extends GameObj implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id = -1;
     private transient Body body;
     private transient Sprite sprite;
-    public static SpriteBatch batch;
-    private static final Texture texture = new Texture("bomb.png");
+    private transient static final Texture texture = new Texture("bomb.png");
     private int time, posX,posY,spanX, spanY, explosionDelay;
+    public transient ArrayList<Object> container;
     public Bomb(int posX, int posY,int time, int spanX, int spanY, int explosionDelay){
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
@@ -49,10 +51,10 @@ public class Bomb implements Serializable {
 
         // dispose polyshape because it has overstayed its welcome
         ps.dispose();
-        if(batch == null) batch = new SpriteBatch();
+        Console.print("bomb dropped!");
     }
     public Bomb(int posX, int posY){
-        this(posX,posY,60,5,5,0);
+        this(posX,posY,60,5,5,10);
     }
     private int animFrame = 0;
     private static final int ANIMAX = 10;
@@ -69,7 +71,7 @@ public class Bomb implements Serializable {
         int i = 0;
         if(isFrame2) i++;
         if(sprite!=null) sprite.setRegion(i*16,0,16,16);
-        batch.setProjectionMatrix(GameMap.camera.combined);
+        //batch.setProjectionMatrix(GameMap.camera.combined);
 
         float scaleFactor = MainGame.SCALE/80f;
         if(sprite!=null) batch.draw(sprite, (body.getPosition().x - MainGame.SCALE/2), (body.getPosition().y - MainGame.SCALE/2),
@@ -79,95 +81,24 @@ public class Bomb implements Serializable {
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         int maxX = spanX>>1, maxY = spanY>>1;
-        MainGame.bombsAndExplosions.add(new Explosion(posX,posY,0));
+        Renderer.setToBatch(new Explosion(posX,posY,0),3);
         float scale = MainGame.SCALE;
-        for(int i=1;i <= maxX && i <= maxY; i++){
+        for(int i=1;i <= maxX || i <= maxY; i++){
             if(i<=maxX){
-                MainGame.bombsAndExplosions.add(new Explosion((int)(posX+i*scale),posY,20*i));
-                MainGame.bombsAndExplosions.add(new Explosion((int)(posX-i*scale),posY,20*i));
+                Renderer.setToBatch(new Explosion((int)(posX+i*scale),posY,explosionDelay*i),3);
+                Renderer.setToBatch(new Explosion((int)(posX-i*scale),posY,explosionDelay*i),3);
             }
             if(i<=maxY){
-                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY+i*scale),20*i));
-                MainGame.bombsAndExplosions.add(new Explosion(posX,(int)(posY-i*scale),20*i));
+                Renderer.setToBatch(new Explosion(posX,(int)(posY+i*scale),explosionDelay*i),3);
+                Renderer.setToBatch(new Explosion(posX,(int)(posY-i*scale),explosionDelay*i),3);
             }
         }
         dispose();
     }
     public void dispose(){
         MainGame.world.destroyBody(body);
-        MainGame.bombsAndExplosions.remove(this);
+        Renderer.removeFromBatch(this,3);
         sprite = null;
         body = null;
-    }
-}
-class Explosion implements Collider {
-    private Body body;
-    private static SpriteBatch batch;
-    private static final Texture texture = new Texture("boom.png");
-    private Sprite sprite;
-    private int posX,posY,time;
-    public Explosion(int posX, int posY, int time){
-        this.posX = posX;
-        this.posY = posY;
-        this.time = time;
-
-        if(batch == null) batch = Bomb.batch;
-        sprite = new Sprite(texture);
-        sprite.setRegion(0,0,16,16);
-
-
-
-        if(batch == null)
-            batch = new SpriteBatch();
-    }
-    public void collide(Object o){
-        while(!MainGame.world.isLocked()) // only execute when world is not updating physics
-            if(o instanceof Bomber)
-                dispose();
-    }
-    int frames = 0;
-    public void render(){
-        if(time--> 0) return;
-
-        if(frames++ == 10) {
-            sprite.setRegion(16, 0, 16, 16);
-            body = new BodyBuilder(posX,posY)
-                    .userData(this)
-                    .type(BodyDef.BodyType.StaticBody)
-                    .categoryBits((short)0b1010)
-                    .maskBits((short)0b1100)
-                    .sensor(true)
-                    .build();
-        }
-        if(frames >= 30) dispose();
-        batch.setProjectionMatrix(GameMap.camera.combined);
-        if(sprite!=null) batch.draw(sprite, (posX - MainGame.SCALE/2), (posY - MainGame.SCALE/2),
-                80* MainGame.SCALE/80f, 80* MainGame.SCALE/80f);
-    }
-    public void dispose(){
-        MainGame.world.destroyBody(body);
-        MainGame.bombsAndExplosions.remove(this);
-        sprite = null;
-        body = null;
-    }
-
-}
-class Builder {
-    private int posX,posY;
-    private int time = 60;
-    private int spanX = 3;
-    private int spanY = 3;
-    private int explosionDelay = 0;
-    public Builder(int posX, int posY){
-        this.posX = posX;
-        this.posY = posY;
-    }
-    public void setTime(int time){this.time=time;}
-    public void setSpan(int span){spanX = span; spanY = span;}
-    public void setSpanX(int spanX){this.spanX=spanX;}
-    public void setSpanY(int spanY){this.spanY=spanY;}
-    public void setExplosionDelay(int explosionDelay){this.explosionDelay=explosionDelay;}
-    public Bomb build(){
-        return new Bomb(posX,posY,time,spanX,spanY,explosionDelay);
     }
 }

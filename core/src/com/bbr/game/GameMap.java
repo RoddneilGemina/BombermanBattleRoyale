@@ -10,7 +10,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.bbr.game.Utils.Collider;
+import jdk.tools.jmod.Main;
 
 public class GameMap extends ApplicationAdapter {
     public static final int[][] map = new int[][]{
@@ -54,6 +58,8 @@ public class GameMap extends ApplicationAdapter {
         camera.zoom =0.25f;
         camera.position.x = 50;
         camera.position.y = 50;
+
+        initMap();
     }
 
     @Override
@@ -86,5 +92,38 @@ public class GameMap extends ApplicationAdapter {
         batch.dispose();
         img.dispose();
     }
+    public static World initMap(){
+        float SCALE = MainGame.SCALE;
+        World newWorld = new World(new Vector2(0,0),true);
+        for(int r=0; r<11; r++){
+            for(int c=0;c<11;c++){
+                if(GameMap.map[r][c]==0) continue;
 
+                BodyDef bd = new BodyDef();
+                bd.type = BodyDef.BodyType.StaticBody;
+                bd.position.set((int)(r*SCALE + SCALE/2),(int)(c*SCALE + SCALE/2));
+
+                Body body = newWorld.createBody(bd);
+                PolygonShape ps = new PolygonShape();
+                ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
+                body.createFixture(ps, 0.0f);
+            }
+        }
+        newWorld.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                Object collA = contact.getFixtureA().getBody().getUserData();
+                Object collB = contact.getFixtureB().getBody().getUserData();
+                if(collA instanceof Collider) ((Collider)collA).collide(collB);
+                if(collB instanceof Collider) ((Collider)collB).collide(collA);
+            }
+            @Override
+            public void endContact(Contact contact) {}
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
+        return newWorld;
+    }
 }

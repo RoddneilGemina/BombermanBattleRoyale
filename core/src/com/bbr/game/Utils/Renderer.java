@@ -2,10 +2,11 @@ package com.bbr.game.Utils;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.bbr.game.Console;
 
 import java.util.ArrayList;
 
-public class NewGame {
+public class Renderer {
     private static final int NUMBER_OF_LAYERS = 5;
     private static ArrayList<SpriteBatch> batchLayers;
     private static ArrayList<ArrayList<GameObj>> objectBatches;
@@ -21,8 +22,10 @@ public class NewGame {
             batchLayers.add(new SpriteBatch());
             objectBatches.add(new ArrayList<>());
         }
+        Console.init();
     }
-    public static void setCamera(OrthographicCamera camera) {NewGame.camera = camera;}
+    public static void setCamera(OrthographicCamera camera) {
+        Renderer.camera = camera;}
     public static void render(){
         for(int i=0; i<NUMBER_OF_LAYERS; i++){
             batchLayers.get(i).begin();

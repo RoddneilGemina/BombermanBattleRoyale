@@ -1,11 +1,9 @@
 package com.bbr.game.Utils;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.bbr.game.MainGame;
 
 public abstract class GameObj {
@@ -33,7 +31,7 @@ public abstract class GameObj {
     public void create(){}
     public void dispose(){
         texture.dispose();
-        NewGame.removeFromBatches(this);
+        Renderer.removeFromBatches(this);
     }
     public void setBatch(SpriteBatch spriteBatch){batch = spriteBatch;}
     public SpriteBatch getBatch() {return batch;}

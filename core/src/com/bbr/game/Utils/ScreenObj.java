@@ -30,5 +30,7 @@ public class ScreenObj extends GameObj{
                         size.y
                 );
     }
-
+    public void dispose(){
+        super.dispose();
+    }
 }

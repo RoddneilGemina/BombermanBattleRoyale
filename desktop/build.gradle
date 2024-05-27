@@ -47,3 +47,12 @@ tasks.register('dist', Jar) {
 dist.dependsOn classes
 
 eclipse.project.name = appName + "-desktop"
+
+apply plugin: 'java'
+
+dependencies {
+    implementation project(':core')
+    implementation 'com.google.gwt:gwt-user:2.9.0'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    // Add other necessary server-side dependencies
+}

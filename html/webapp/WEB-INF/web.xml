@@ -1,3 +1,13 @@
 <?xml version="1.0" ?>
 <web-app>
+    <servlet>
+        <servlet-name>NetServiceImpl</servlet-name>
+        <servlet-class>com.bbr.game.server.NetServiceImpl
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>NetServiceImpl</servlet-name>
+        <url-pattern>/game/bomb</url-pattern>
+    </servlet-mapping>
 </web-app>

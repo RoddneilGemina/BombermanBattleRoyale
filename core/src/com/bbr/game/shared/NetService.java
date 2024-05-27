@@ -1,10 +1,11 @@
-package com.bbr.net;
+package com.bbr.game.shared;
 
 import com.bbr.game.Bomb;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath("message")
+@RemoteServiceRelativePath("bomb")
 public interface NetService extends RemoteService {
-    Bomb sendBomb(String input);
+    //Bomb sendBomb(float posX, float posY);
+    Message sendText(String message);
 }

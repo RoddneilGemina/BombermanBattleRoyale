@@ -7,6 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Controllable;
+import com.bbr.game.Utils.Renderer;
+import com.bbr.game.shared.Message;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Bomber implements Controllable, Collider {
     public int id;
@@ -42,6 +45,7 @@ public class Bomber implements Controllable, Collider {
     public void collide(Object o){
         if(o instanceof Explosion){
             health -= 10;
+            Console.print("OUCH!!!");
         }
     }
 
@@ -97,11 +101,25 @@ public class Bomber implements Controllable, Collider {
 
     }
     public void dropBomb(){
-        MainGame.bombsAndExplosions.add(
+//        if(MainGame.gameService!=null && MainGame.gameService.getType().matches("client")){
+//            MainGame.gameService.sendBomb((int) (10 * Math.round((posX - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2), (int) (10 * Math.round((posY - MainGame.SCALE + 3) / 10) + MainGame.SCALE / 2), new AsyncCallback<Bomb>() {
+//                @Override
+//                public void onFailure(Throwable throwable) {
+//                    Console.print("BOMB NOT SENT");
+//                }
+//
+//                @Override
+//                public void onSuccess(Bomb bomb) {
+//                    Console.print("BOMB SUCCESSFULLY SENT");
+//                }
+//            });
+//        }
+
+        Renderer.setToBatch(
                 new Bomb(
                         (int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),
                         (int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2)
-                )
+                ),3
         );
 //        MainGame.gameClient.addBomb((int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),(int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2),id);
     }

@@ -29,6 +29,6 @@ public class DesktopLauncher {
 			}
 		}
 
-		new Lwjgl3Application(new MainGame(ip,server,play), config);
+		new Lwjgl3Application(new MainGame(ip,server,play,null), config);
 	}
 }

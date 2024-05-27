@@ -12,6 +12,10 @@ gwt {
         strict = true;
         disableCastChecking = true;
     }
+    jsInteropExports {
+        shouldGenerate = true
+        // breaks if I use includePatterns
+    }
 }
 
 import org.docstr.gradle.plugins.gwt.GwtSuperDev
@@ -87,6 +91,22 @@ tasks.draftCompileGwt.dependsOn(addSource)
 tasks.checkGwt.dependsOn(addSource)
 
 sourceCompatibility = 1.8
-sourceSets.main.java.srcDirs = [ "src/" ]
+//sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/"]
+            exclude '**/server/**'
+        }
+    }
+}
 
 eclipse.project.name = appName + "-html"
+
+dependencies {
+    implementation "com.google.gwt:gwt-user:2.8.2"
+    implementation "com.google.gwt:gwt-dev:2.8.2"
+    implementation "com.google.gwt:gwt-servlet:2.8.2"
+    implementation "com.google.jsinterop:jsinterop-annotations:2.0.2"
+
+}
