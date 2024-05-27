@@ -8,8 +8,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Controllable;
 import com.bbr.game.Utils.Renderer;
-import com.bbr.game.shared.Message;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.ArrayList;
 
@@ -25,12 +23,12 @@ public class Bomber implements Controllable, Collider {
     private boolean isNPC = true;
     private int health = 100;
     private HealthDisplay healthDisplay;
-    private ArrayList<OffenseAction> inventory;
-    private UtilityAction utility;
+    private ArrayList<PlayerAction> inventory;
+    private SkillAction skill;
 
     public Bomber(int posX, int posY, int id){
         inventory = new ArrayList<>();
-        utility = new Dash();
+        skill = new Dash();
         this.id = id;
         this.posX = posX;
         this.posY = posY;
@@ -156,7 +154,7 @@ public class Bomber implements Controllable, Collider {
     public void actionLeft(){moveBody(-1,0);}
     public void actionRight(){moveBody(1,0);}
     public void action1(){dropBomb();}
-    public void action2(){utility.doAction(this);}
+    public void action2(){skill.doAction(this);}
     public Vector2 getDirection(){return direction;}
     public void setDirection(Vector2 dir){this.direction = dir;}
 }
