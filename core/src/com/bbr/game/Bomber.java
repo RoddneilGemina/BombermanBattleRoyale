@@ -29,8 +29,9 @@ public class Bomber implements Controllable, Collider {
 
     public Bomber(int posX, int posY, int id){
         inventory = new ArrayList<>();
-        inventory.add(new SmallBomb());
         inventory.add(new Heal());
+        inventory.add(new SmallBomb());
+        inventoryIndex = 1;
         skill = new Dash();
         this.id = id;
         this.posX = posX;
@@ -155,12 +156,13 @@ public class Bomber implements Controllable, Collider {
     public void actionRight(){moveBody(1,0);}
     public void action1(){
         if(!inventory.isEmpty()){
-            inventoryIndex = Math.max(inventoryIndex,inventory.size()-1);
+            inventoryIndex = Math.min(inventoryIndex,inventory.size()-1);
+            Console.print("ACTION: "+inventoryIndex);
             inventory.get(inventoryIndex).doAction(this);
         }
     }
     public void action2(){skill.doAction(this);}
-    public void action3(){inventoryIndex = (inventoryIndex-1)%inventory.size();}
+    public void action3(){inventoryIndex = (inventory.size() + inventoryIndex-1)%inventory.size();}
     public void action4(){inventoryIndex = (inventoryIndex+1)%inventory.size();}
     public Vector2 getDirection(){return direction;}
     public void setDirection(Vector2 dir){this.direction = dir;}

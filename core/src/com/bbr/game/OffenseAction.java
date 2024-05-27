@@ -2,11 +2,10 @@ package com.bbr.game;
 
 import com.bbr.game.Utils.Renderer;
 
-abstract class OffenseAction extends PlayerAction {
+public abstract class OffenseAction extends PlayerAction {
     public abstract void doAction(Bomber b);
 }
 class SmallBomb extends OffenseAction{
-
     public void doAction(Bomber b){
         Renderer.setToBatch(
                 new Bomb(
@@ -17,3 +16,5 @@ class SmallBomb extends OffenseAction{
         count--;
     }
 }
+
+
