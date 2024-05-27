@@ -24,6 +24,7 @@ public class Bomber implements Controllable, Collider {
     private int health = 100;
     private HealthDisplay healthDisplay;
     private ArrayList<PlayerAction> inventory;
+    private int inventoryIndex = 0;
     private SkillAction skill;
 
     public Bomber(int posX, int posY, int id){
@@ -125,12 +126,8 @@ public class Bomber implements Controllable, Collider {
 //                }
 //            });
 //        }
-        Renderer.setToBatch(
-                new Bomb(
-                        (int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),
-                        (int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2)
-                ),3
-        );
+
+
 //        MainGame.gameClient.addBomb((int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),(int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2),id);
     }
 
@@ -153,8 +150,15 @@ public class Bomber implements Controllable, Collider {
     public void actionDown(){moveBody(0,-1);}
     public void actionLeft(){moveBody(-1,0);}
     public void actionRight(){moveBody(1,0);}
-    public void action1(){dropBomb();}
+    public void action1(){
+        if(!inventory.isEmpty()){
+            inventoryIndex = Math.max(inventoryIndex,inventory.size()-1);
+            inventory.get(inventoryIndex).doAction(this);
+        }
+    }
     public void action2(){skill.doAction(this);}
+    public void action3(){inventoryIndex = (inventoryIndex-1)%inventory.size();}
+    public void action4(){inventoryIndex = (inventoryIndex+1)%inventory.size();}
     public Vector2 getDirection(){return direction;}
     public void setDirection(Vector2 dir){this.direction = dir;}
 }
