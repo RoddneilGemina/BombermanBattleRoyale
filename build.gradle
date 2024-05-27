@@ -86,6 +86,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
         api "com.kotcrab.vis:vis-ui:1.4.11"
+        implementation "org.mini2Dx:universal-tween-engine:6.3.3"
         implementation 'com.esotericsoftware:kryo:5.2.0'
         implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
         

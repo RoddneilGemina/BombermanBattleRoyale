@@ -2,6 +2,7 @@ package com.bbr.game;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.bbr.Menu.tmp;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -9,7 +10,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("BombermanBattleRoyale");
-		config.setWindowSizeLimits(640,480,640,480);
+		config.setWindowSizeLimits(640,480,1280,720);
 		config.setResizable(false);
 		String ip = "127.0.0.1";
 		boolean server = true;
@@ -29,6 +30,7 @@ public class DesktopLauncher {
 			}
 		}
 
-		new Lwjgl3Application(new MainGame(ip,server,play), config);
+//		new Lwjgl3Application(new MainGame(ip,server,play), config);
+		new Lwjgl3Application(new tmp(), config);
 	}
 }
