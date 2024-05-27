@@ -7,6 +7,7 @@ public abstract class OffenseAction extends PlayerAction {
 }
 class SmallBomb extends OffenseAction{
     public SmallBomb(){
+        count = 999;
         this.rX = 1;
         this.rY = 0;
     }
@@ -17,7 +18,6 @@ class SmallBomb extends OffenseAction{
                         (int)(10*Math.round((b.getPosY()-MainGame.SCALE+3)/10)+MainGame.SCALE/2)
                 ),3
         );
-        count--;
     }
 }
 

@@ -167,10 +167,15 @@ public class Bomber implements Controllable, Collider {
     public void action1(){
         if(!inventory.isEmpty()){
             inventoryIndex = Math.min(inventoryIndex,inventory.size()-1);
+            if(inventoryIndex < 0) inventoryIndex = 0;
             Console.print("ACTION: "+inventoryIndex);
             inventory.get(inventoryIndex).doAction(this);
+            if(!(inventory.get(inventoryIndex) instanceof SmallBomb)) {
+                inventory.get(inventoryIndex).count--;
+            }
             if(inventory.get(inventoryIndex).count==0){
                 inventory.remove(inventoryIndex);
+                inventoryIndex = Math.max(0,inventoryIndex-1);
             }
         }
     }
