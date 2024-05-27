@@ -9,6 +9,7 @@ import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Controllable;
 import com.bbr.game.Utils.Renderer;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Bomber implements Controllable, Collider {
@@ -24,6 +25,7 @@ public class Bomber implements Controllable, Collider {
     private boolean isNPC = true;
     private int health = 100;
     private HealthDisplay healthDisplay;
+    private ItemDisplay itemDisplay;
     private ArrayList<PlayerAction> inventory;
     private int inventoryIndex = 0;
     private SkillAction skill;
@@ -55,6 +57,7 @@ public class Bomber implements Controllable, Collider {
             body.setMassData(md);
         }
         healthDisplay = new HealthDisplay(this);
+        itemDisplay = new ItemDisplay(this);
     }
     public void collide(Object o){
         if(o instanceof Explosion){
@@ -166,6 +169,9 @@ public class Bomber implements Controllable, Collider {
             inventoryIndex = Math.min(inventoryIndex,inventory.size()-1);
             Console.print("ACTION: "+inventoryIndex);
             inventory.get(inventoryIndex).doAction(this);
+            if(inventory.get(inventoryIndex).count==0){
+                inventory.remove(inventoryIndex);
+            }
         }
     }
     public void action2(){skill.doAction(this);}
@@ -173,7 +179,18 @@ public class Bomber implements Controllable, Collider {
     public void action4(){inventoryIndex = (inventoryIndex+1)%inventory.size();}
     public Vector2 getDirection(){return direction;}
     public void setDirection(Vector2 dir){this.direction = dir;}
-    public void addToInventory(PlayerAction pa){
-        inventory.add(pa);
+    public boolean addToInventory(PlayerAction pa){
+        if(inventory.size()<5) {
+            inventory.add(pa);
+            return true;
+        }
+
+        return false;
+    }
+    public ArrayList<PlayerAction> getInventory(){
+        return inventory;
+    }
+    public int getSelectedIndex(){
+        return inventoryIndex;
     }
 }

@@ -47,6 +47,7 @@ public class MainGame extends Game {
 		Renderer.init();
 		Renderer.setCamera(GameMap.camera);
 		if(isPlaying) initPlayer();
+		ItemSpawner.spawnItem(10);
 }
 
 	@Override

@@ -6,6 +6,10 @@ public abstract class OffenseAction extends PlayerAction {
     public abstract void doAction(Bomber b);
 }
 class SmallBomb extends OffenseAction{
+    public SmallBomb(){
+        this.rX = 1;
+        this.rY = 0;
+    }
     public void doAction(Bomber b){
         Renderer.setToBatch(
                 new Bomb(

@@ -20,14 +20,14 @@ public class GameMap extends ApplicationAdapter {
     public static final int[][] map = new int[][]{
             {1,1,1,1,1,1,1,1,1,1,1},
             {1,0,0,0,0,0,0,0,0,0,1},
-            {1,0,3,0,3,0,3,0,3,0,1},
+            {1,0,3,0,3,0,3,3,3,0,1},
+            {1,0,3,0,3,0,0,0,3,0,1},
+            {1,0,3,3,3,0,3,0,3,3,1},
             {1,0,0,0,0,0,0,0,0,0,1},
-            {1,0,3,0,3,0,3,0,3,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1},
-            {1,0,3,0,3,0,3,0,3,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1},
-            {1,0,3,0,3,0,3,0,3,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1},
+            {1,0,3,3,3,0,3,0,3,0,1},
+            {1,0,0,0,3,0,0,0,3,0,1},
+            {1,0,3,3,3,0,3,3,3,0,1},
+            {1,0,0,0,0,0,3,0,0,0,1},
             {1,1,1,1,1,1,1,1,1,1,1}
     };
     private int mapW = 11, mapH = 11;
@@ -101,7 +101,7 @@ public class GameMap extends ApplicationAdapter {
 
                 BodyDef bd = new BodyDef();
                 bd.type = BodyDef.BodyType.StaticBody;
-                bd.position.set((int)(r*SCALE + SCALE/2),(int)(c*SCALE + SCALE/2));
+                bd.position.set((int)(c*SCALE + SCALE/2),(int)(r*SCALE + SCALE/2));
 
                 Body body = newWorld.createBody(bd);
                 PolygonShape ps = new PolygonShape();
