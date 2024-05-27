@@ -52,7 +52,7 @@ public class Bomb extends GameObj implements Serializable {
 
         // dispose polyshape because it has overstayed its welcome
         ps.dispose();
-        Console.print("bomb dropped!");
+        //Console.print("bomb dropped!");
     }
     public Bomb(int posX, int posY){
         this(posX,posY,60,5,5,10,10);

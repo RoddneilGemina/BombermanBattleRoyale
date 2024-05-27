@@ -28,8 +28,11 @@ public class ItemDisplay extends ScreenObj {
         for(int i = 0; i < 5; i++){
             if(i == index){
                 boxSprite.setRegion(0,0,16,16);
-            } else boxSprite.setRegion(16,0,16,16);
-
+                boxSprite.setAlpha(1f);
+            } else {
+                boxSprite.setRegion(16, 0, 16, 16);
+                boxSprite.setAlpha(0.1f);
+            }
             batch.draw(
                     boxSprite,
                     10+16*i*5,

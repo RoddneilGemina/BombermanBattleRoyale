@@ -35,6 +35,8 @@ public class Renderer {
             }
             batchLayers.get(i).end();
         }
+    }
+    public static void renderScreen(){
         screenBatch.begin();
         for(int i=0; i<screenBatchObjects.size(); i++){
             screenBatchObjects.get(i).render();

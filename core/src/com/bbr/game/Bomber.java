@@ -39,7 +39,7 @@ public class Bomber implements Controllable, Collider {
         this.id = id;
         this.posX = posX;
         this.posY = posY;
-        if(texture == null) texture = new Texture("bomber.png");
+        if(texture == null) texture = new Texture("bomberman.png");
         sprite = new Sprite(texture);
         direction = new Vector2(1,1);
         if(true){
@@ -82,6 +82,8 @@ public class Bomber implements Controllable, Collider {
         body.createFixture(fixtureDef);
         body.setLinearDamping(30f);
         boxShape.dispose();
+
+        batch = (SpriteBatch) GameMap.renderer.getBatch();
     }
     public void addHealth(int h){this.health+=h;}
     public int getHealth(){return health;}
@@ -99,48 +101,46 @@ public class Bomber implements Controllable, Collider {
     public void teleport(float x, float y){
         body.setTransform(x,y,body.getAngle());
     }
-    int flipframe = 0;
-    private static final int FLIPFRAMEMAX = 20;
+    int framedex = 1;
+    int dirindex = 1;
+    int framectr = 0;
+    int framedir = 1;
+    private static final int FRAMEMAX = 7;
     public void render()
     {
-        flipframe++;
-        if(flipframe>=FLIPFRAMEMAX){
-            flipframe = 0;
-            sprite.flip(true,false);
+        if(direction.y > 0.4f)
+            dirindex = 0;
+        else if(direction.x > 0.6f)
+            dirindex = 3;
+        else if(direction.x < -0.6f)
+            dirindex = 2;
+        else
+            dirindex = 1;
+        if(body.getLinearVelocity().len() > 0.2f){
+            if(framectr++>=FRAMEMAX){
+                framedex+=framedir;
+                if(framedex!=1) framedir*=-1;
+                framectr = 0;
+            }
+        } else {
+            framedex = 1;
         }
+        sprite.setRegion(16*framedex,25*dirindex,16,25);
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         //Vector2 lastDir = direction.cpy();
         direction = body.getLinearVelocity();
         direction.nor();
         //if(direction.x == 0 && direction.y ==0) direction = lastDir;
-        batch = (SpriteBatch) GameMap.renderer.getBatch();
+        float width = 65;
+        float height= width*(25.0f/16.0f);
         batch.draw(
                 sprite,
                 body.getPosition().x - MainGame.SCALE/2,
-                body.getPosition().y - MainGame.SCALE/2,
-                75* MainGame.SCALE/80f,
-                75* MainGame.SCALE/80f
+                body.getPosition().y - MainGame.SCALE/2 + 1,
+                width* MainGame.SCALE/80f,
+                height* MainGame.SCALE/80f
         );
-        //Console.print("VX: "+direction.x + "VY: "+direction.y);
-    }
-    public void dropBomb(){
-//        if(MainGame.gameService!=null && MainGame.gameService.getType().matches("client")){
-//            MainGame.gameService.sendBomb((int) (10 * Math.round((posX - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2), (int) (10 * Math.round((posY - MainGame.SCALE + 3) / 10) + MainGame.SCALE / 2), new AsyncCallback<Bomb>() {
-//                @Override
-//                public void onFailure(Throwable throwable) {
-//                    Console.print("BOMB NOT SENT");
-//                }
-//
-//                @Override
-//                public void onSuccess(Bomb bomb) {
-//                    Console.print("BOMB SUCCESSFULLY SENT");
-//                }
-//            });
-//        }
-
-
-//        MainGame.gameClient.addBomb((int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),(int)(10*Math.round((posY-MainGame.SCALE+3)/10)+MainGame.SCALE/2),id);
     }
 
     public int getPosX() {
@@ -166,14 +166,14 @@ public class Bomber implements Controllable, Collider {
         if(!inventory.isEmpty()){
             inventoryIndex = Math.min(inventoryIndex,inventory.size()-1);
             if(inventoryIndex < 0) inventoryIndex = 0;
-            Console.print("ACTION: "+inventoryIndex);
             inventory.get(inventoryIndex).doAction(this);
             if(!(inventory.get(inventoryIndex) instanceof SmallBomb)) {
                 inventory.get(inventoryIndex).count--;
             }
             if(inventory.get(inventoryIndex).count==0){
                 inventory.remove(inventoryIndex);
-                inventoryIndex = Math.max(0,inventoryIndex-1);
+                inventoryIndex = Math.min(inventory.size()-1,inventoryIndex);
+                if(inventoryIndex<0) inventoryIndex=0;
             }
         }
     }

@@ -68,7 +68,6 @@ public class GameMap extends ApplicationAdapter {
             camera.position.x = bomber.getBody().getPosition().x;
             camera.position.y = bomber.getBody().getPosition().y;
         }
-        ScreenUtils.clear(1, 0, 0, 1);
         camera.update();
         renderer.setView(camera);
         renderer.render();

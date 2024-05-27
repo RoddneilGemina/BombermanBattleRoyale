@@ -59,8 +59,9 @@ public class MainGame extends Game {
 		gm.render();	// render map
 		if(con!=null) con.render(); // update controller
 
-		debugRenderer.render(world,GameMap.camera.combined); // render hitboxes
+		//debugRenderer.render(world,GameMap.camera.combined); // render hitboxes
 
+		Renderer.render();
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
 
 		GameMap.renderer.getBatch().begin();
@@ -69,13 +70,13 @@ public class MainGame extends Game {
 			curr.render();
 		}
 		GameMap.renderer.getBatch().end();
+		Renderer.renderScreen();
 		if(!world.isLocked())
 		while(!disposeList.isEmpty()){
 			world.destroyBody(disposeList.get(0));
 			disposeList.remove(0);
 		}
 
-		Renderer.render();
 	}
 
 	@Override
