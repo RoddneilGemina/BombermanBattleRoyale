@@ -1,5 +1,7 @@
 package com.bbr.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.bbr.game.Utils.BodyBuilder;
 import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Renderer;
@@ -44,9 +46,14 @@ class SmallBombItem extends Collectible {
 }
 class ItemSpawner {
     private static final Class<?>[] ITEMTYPES = new Class[]{SmallBomb.class};
+    private static final Texture txt = new Texture("items.png");
     public static void createItem(PlayerAction a, int posX, int posY){
         Collectible item = new Collectible(posX,posY);
         item.setAction(a);
+        Sprite spr = new Sprite(txt);
+        spr.setRegion(a.getRx()*16,a.getRy()*16,16,16);
+        item.setSize(1f);
+        item.setSprite(spr);
         Renderer.setToBatch(item,3);
     }
     public static void spawnItem(int num){
