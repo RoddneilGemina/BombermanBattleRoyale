@@ -29,6 +29,7 @@ public class Bomber implements Controllable, Collider {
 
     public Bomber(int posX, int posY, int id){
         inventory = new ArrayList<>();
+        inventory.add(new SpawnItem());
         inventory.add(new Heal());
         inventory.add(new SmallBomb());
         inventoryIndex = 1;
@@ -166,4 +167,7 @@ public class Bomber implements Controllable, Collider {
     public void action4(){inventoryIndex = (inventoryIndex+1)%inventory.size();}
     public Vector2 getDirection(){return direction;}
     public void setDirection(Vector2 dir){this.direction = dir;}
+    public void addToInventory(PlayerAction pa){
+        inventory.add(pa);
+    }
 }

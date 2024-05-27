@@ -3,10 +3,13 @@ package com.bbr.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.bbr.game.Utils.GameObj;
 import com.bbr.game.Utils.Renderer;
+import com.bbr.game.Utils.WorldObj;
 import com.bbr.game.shared.NetServiceAsync;
 //import com.bbr.game.shared.NetInterface;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +17,7 @@ public class MainGame extends Game {
 	public static boolean isServer = false;
 	private boolean isPlaying = false;
 	public static NetServiceAsync netass;
+	public static ArrayList<Body> disposeList = new ArrayList<>();
 	public MainGame(String ip, boolean server, boolean play, NetServiceAsync netass){
 		this.netass = netass;
 		MainGame.isServer = server;
@@ -47,7 +51,9 @@ public class MainGame extends Game {
 
 	@Override
 	public void render () {
+
 		world.step(1/60f,6,2); //update physics
+
 		ScreenUtils.clear(0, 0, 0, 1);	// clear screen
 		gm.render();	// render map
 		if(con!=null) con.render(); // update controller
@@ -62,7 +68,11 @@ public class MainGame extends Game {
 			curr.render();
 		}
 		GameMap.renderer.getBatch().end();
-
+		if(!world.isLocked())
+		while(!disposeList.isEmpty()){
+			world.destroyBody(disposeList.get(0));
+			disposeList.remove(0);
+		}
 
 		Renderer.render();
 	}

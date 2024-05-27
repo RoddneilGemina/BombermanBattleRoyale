@@ -36,9 +36,7 @@ public class WorldObj extends GameObj {
                 );
     }
     public void dispose(){
-        if(body!=null){
-            body.getWorld().destroyBody(body);
-        }
         super.dispose();
+        MainGame.disposeList.add(body);;
     }
 }
