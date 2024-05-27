@@ -82,17 +82,30 @@ public class Bomb extends GameObj implements Serializable {
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         int maxX = spanX>>1, maxY = spanY>>1;
+        int cx = GameMap.posToCoord(posX);
+        int cy = GameMap.posToCoord(posY);
+        Console.print("EXPLOSION: "+cx+" "+cy);
         Renderer.setToBatch(new Explosion(posX,posY,0,damage),3);
         float scale = MainGame.SCALE;
-        for(int i=1;i <= maxX || i <= maxY; i++){
-            if(i<=maxX){
+        for(int i=1;i <= maxX; i++){
+            try{ if(GameMap.map[cy][cx+i] == 0){
                 Renderer.setToBatch(new Explosion((int)(posX+i*scale),posY,explosionDelay*i,damage),3);
-                Renderer.setToBatch(new Explosion((int)(posX-i*scale),posY,explosionDelay*i,damage),3);
-            }
-            if(i<=maxY){
+            } else break; } catch (Exception e){ break; }
+        }
+        for(int i=1;i <= maxX; i++){
+            try{ if(GameMap.map[cy][cx-i] == 0){
+                    Renderer.setToBatch(new Explosion((int)(posX-i*scale),posY,explosionDelay*i,damage),3);
+                } else break; } catch (Exception e){ break; }
+        }
+        for(int i=1;i <= maxY; i++){
+            try{ if(GameMap.map[cy+i][cx] == 0){
                 Renderer.setToBatch(new Explosion(posX,(int)(posY+i*scale),explosionDelay*i,damage),3);
+            } else break; } catch (Exception e){ break; }
+        }
+        for(int i=1;i <= maxY; i++){
+            try{ if(GameMap.map[cy-i][cx] == 0){
                 Renderer.setToBatch(new Explosion(posX,(int)(posY-i*scale),explosionDelay*i,damage),3);
-            }
+            } else break; } catch (Exception e){ break; }
         }
         dispose();
     }
@@ -102,4 +115,10 @@ public class Bomb extends GameObj implements Serializable {
         sprite = null;
         body = null;
     }
+}
+enum BombPattern{
+    CROSS,
+    X,
+    BOX,
+    RANDOM
 }

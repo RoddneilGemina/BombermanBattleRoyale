@@ -30,7 +30,8 @@ public class GameMap extends ApplicationAdapter {
             {1,0,0,0,0,0,3,0,0,0,1},
             {1,1,1,1,1,1,1,1,1,1,1}
     };
-    private int mapW = 11, mapH = 11;
+    public static final int MAP_W = 11;
+    public static final int MAP_H = 11;
     SpriteBatch batch;
     Texture img;
     TiledMap tiledMap;
@@ -40,7 +41,7 @@ public class GameMap extends ApplicationAdapter {
 
     public static void setBomber(Bomber bomber) {
         GameMap.bomber = bomber;
-        camera.zoom = 0.125f;
+        camera.zoom = 0.25f;
     }
     @Override
     public void create () {
@@ -75,9 +76,9 @@ public class GameMap extends ApplicationAdapter {
 
     }
     private TiledMapTileLayer generateLayer() {
-        TiledMapTileLayer layer1 = new TiledMapTileLayer(mapW, mapH, 16, 16);
-        for(int r=0; r<mapW; r++){
-            for(int c=0; c<mapH; c++){
+        TiledMapTileLayer layer1 = new TiledMapTileLayer(MAP_W, MAP_H, 16, 16);
+        for(int r=0; r<MAP_H; r++){
+            for(int c=0; c<MAP_W; c++){
                 TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
                 TextureRegion tr = new TextureRegion(img,map[r][c]*16,0,16,16);
                 cell.setTile(new StaticTiledMapTile(tr));
@@ -94,8 +95,8 @@ public class GameMap extends ApplicationAdapter {
     public static World initMap(){
         float SCALE = MainGame.SCALE;
         World newWorld = new World(new Vector2(0,0),true);
-        for(int r=0; r<11; r++){
-            for(int c=0;c<11;c++){
+        for(int r=0; r<MAP_H; r++){
+            for(int c=0;c<MAP_W;c++){
                 if(GameMap.map[r][c]==0) continue;
 
                 BodyDef bd = new BodyDef();
@@ -124,5 +125,8 @@ public class GameMap extends ApplicationAdapter {
             public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
         return newWorld;
+    }
+    public static int posToCoord(float pos){
+        return (int) ((10 * Math.round((pos - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2) / 10 - 0.5f);
     }
 }

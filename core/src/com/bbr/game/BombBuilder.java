@@ -6,6 +6,8 @@ public class BombBuilder {
     private int spanX = 3;
     private int spanY = 3;
     private int explosionDelay = 10;
+    private int damageAdder = 0;
+    private float damageMultiplier = 1;
     private int damage = 10;
     private boolean snap = true;
 
@@ -48,12 +50,15 @@ public class BombBuilder {
     public BombBuilder setCenter(boolean snap){this.snap = snap;
         return this;
     }
+    public BombBuilder setDamageAdder(int damageAdd){this.damageAdder=damageAdd; return this;}
+    public BombBuilder setDamageMultiplier(float multiplier){this.damageMultiplier=multiplier; return this;}
+
 
     public Bomb build() {
         if(snap) {
             posX = (int) (10 * Math.round((posX - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2);
             posY = (int) (10 * Math.round((posY - MainGame.SCALE + 3) / 10) + MainGame.SCALE / 2);
         }
-        return new Bomb(posX, posY, time, spanX, spanY, explosionDelay,damage);
+        return new Bomb(posX, posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder));
     }
 }

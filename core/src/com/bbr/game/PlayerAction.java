@@ -13,12 +13,3 @@ public abstract class PlayerAction{
     protected Sprite sprite = new Sprite(texture);
     public abstract void doAction(Bomber b);
 }
-class SpawnItem extends PlayerAction{
-    public void doAction(Bomber b){
-        float posX = b.getPosX();
-        float posY = b.getPosY();
-        posX += b.getDirection().x * 10;
-        posY += b.getDirection().y * 10;
-        Renderer.setToBatch(new SmallBombItem(posX,posY),3);
-    }
-}

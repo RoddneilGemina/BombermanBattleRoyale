@@ -7,8 +7,6 @@ import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Renderer;
 import com.bbr.game.Utils.WorldObj;
 
-import java.lang.reflect.InvocationTargetException;
-
 public abstract class Item extends WorldObj implements Collider {
     public Item(float posX, float posY){
         super(posX,posY,0.5f,0.5f);
@@ -38,12 +36,6 @@ class Collectible extends Item {
     }
 
 }
-class SmallBombItem extends Collectible {
-    public SmallBombItem(float posX, float posY) {
-        super(posX, posY);
-        playerAction = new SmallBomb();
-    }
-}
 class ItemSpawner {
     private static final Class<?>[] ITEMTYPES = new Class[]{MediumCrossBomb.class};
     private static final Texture txt = new Texture("items.png");
@@ -61,8 +53,8 @@ class ItemSpawner {
         Class<?> itemClass;
         for(int i = 0; i < num; i++){
             do{
-                x = ((int)(Math.random()*1000))%11;
-                y = ((int)(Math.random()*1000))%11;
+                x = ((int)(Math.random()*1000))%GameMap.MAP_W;
+                y = ((int)(Math.random()*1000))%GameMap.MAP_H;
             }while(GameMap.map[y][x]!=0);
             x = (int)(x*MainGame.SCALE + MainGame.SCALE/2);
             y = (int)(y*MainGame.SCALE + MainGame.SCALE/2);
