@@ -29,6 +29,8 @@ public class Bomber implements Controllable, Collider {
 
     public Bomber(int posX, int posY, int id){
         inventory = new ArrayList<>();
+        inventory.add(new SmallBomb());
+        inventory.add(new Heal());
         skill = new Dash();
         this.id = id;
         this.posX = posX;
@@ -72,6 +74,7 @@ public class Bomber implements Controllable, Collider {
         body.setLinearDamping(30f);
         boxShape.dispose();
     }
+    public void addHealth(int h){this.health+=h;}
     public int getHealth(){return health;}
     public Body getBody(){return body;}
     int speed = 500;
