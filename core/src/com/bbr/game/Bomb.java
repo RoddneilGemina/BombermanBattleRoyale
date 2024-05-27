@@ -19,12 +19,13 @@ public class Bomb extends GameObj implements Serializable {
     private transient Body body;
     private transient Sprite sprite;
     private transient static final Texture texture = new Texture("bomb.png");
-    private int time, posX,posY,spanX, spanY, explosionDelay;
+    private int time, posX,posY,spanX, spanY, explosionDelay, damage;
     public transient ArrayList<Object> container;
-    public Bomb(int posX, int posY,int time, int spanX, int spanY, int explosionDelay){
+    public Bomb(int posX, int posY,int time, int spanX, int spanY, int explosionDelay, int damage){
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
         this.time = time; this.explosionDelay = explosionDelay;
+        this.damage = damage;
         // TEMPORARY ! ! !
         id = (int)Math.round(Math.random()*2000);
 
@@ -54,7 +55,7 @@ public class Bomb extends GameObj implements Serializable {
         Console.print("bomb dropped!");
     }
     public Bomb(int posX, int posY){
-        this(posX,posY,60,5,5,10);
+        this(posX,posY,60,5,5,10,10);
     }
     private int animFrame = 0;
     private static final int ANIMAX = 10;
@@ -81,16 +82,16 @@ public class Bomb extends GameObj implements Serializable {
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
         int maxX = spanX>>1, maxY = spanY>>1;
-        Renderer.setToBatch(new Explosion(posX,posY,0),3);
+        Renderer.setToBatch(new Explosion(posX,posY,0,damage),3);
         float scale = MainGame.SCALE;
         for(int i=1;i <= maxX || i <= maxY; i++){
             if(i<=maxX){
-                Renderer.setToBatch(new Explosion((int)(posX+i*scale),posY,explosionDelay*i),3);
-                Renderer.setToBatch(new Explosion((int)(posX-i*scale),posY,explosionDelay*i),3);
+                Renderer.setToBatch(new Explosion((int)(posX+i*scale),posY,explosionDelay*i,damage),3);
+                Renderer.setToBatch(new Explosion((int)(posX-i*scale),posY,explosionDelay*i,damage),3);
             }
             if(i<=maxY){
-                Renderer.setToBatch(new Explosion(posX,(int)(posY+i*scale),explosionDelay*i),3);
-                Renderer.setToBatch(new Explosion(posX,(int)(posY-i*scale),explosionDelay*i),3);
+                Renderer.setToBatch(new Explosion(posX,(int)(posY+i*scale),explosionDelay*i,damage),3);
+                Renderer.setToBatch(new Explosion(posX,(int)(posY-i*scale),explosionDelay*i,damage),3);
             }
         }
         dispose();
