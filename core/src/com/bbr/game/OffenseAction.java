@@ -1,6 +1,5 @@
 package com.bbr.game;
 
-public abstract class PlayerAction{
-    int count = 1;
+abstract class OffenseAction extends PlayerAction {
     public abstract void doAction(Bomber b);
 }
