@@ -30,7 +30,11 @@ public class Bomber implements Controllable, Collider {
     private int inventoryIndex = 0;
     private SkillAction skill;
 
+    float width = 65;
+    float height= width*(25.0f/16.0f);
+
     public Bomber(int posX, int posY, int id){
+        effects = new ArrayList<>();
         lives = 3;
         inventory = new ArrayList<>();
         //linventory.add(new SmallBomb());
@@ -40,6 +44,8 @@ public class Bomber implements Controllable, Collider {
         this.posY = posY;
         if(texture == null) texture = new Texture("bomberman.png");
         sprite = new Sprite(texture);
+
+        sprite.setSize(width* MainGame.SCALE/80f,height* MainGame.SCALE/80f);
         direction = new Vector2(1,1);
         if(true){
             BodyDef bodyDef = new BodyDef();
@@ -67,6 +73,7 @@ public class Bomber implements Controllable, Collider {
         }
     }
 
+    public SpriteBatch getBatch(){return batch;}
     public Bomber(int id) {
         this((int)(MainGame.SCALE + MainGame.SCALE/2),(int)(MainGame.SCALE + MainGame.SCALE/2),id);
         isNPC = false;
@@ -131,15 +138,16 @@ public class Bomber implements Controllable, Collider {
         direction = body.getLinearVelocity();
         direction.nor();
         //if(direction.x == 0 && direction.y ==0) direction = lastDir;
-        float width = 65;
-        float height= width*(25.0f/16.0f);
-        batch.draw(
-                sprite,
-                body.getPosition().x - MainGame.SCALE/2,
-                body.getPosition().y - MainGame.SCALE/2 + 1,
-                width* MainGame.SCALE/80f,
-                height* MainGame.SCALE/80f
-        );
+        effectsDuring();
+        sprite.setCenter(body.getPosition().x,body.getPosition().y+2);
+        sprite.draw(batch);
+//        batch.draw(
+//                sprite,
+//                body.getPosition().x ,
+//                body.getPosition().y - MainGame.SCALE/2 + 1,
+//                width* MainGame.SCALE/80f,
+//                height* MainGame.SCALE/80f
+//        );
     }
 
     public int getPosX() {
@@ -196,4 +204,20 @@ public class Bomber implements Controllable, Collider {
     public int getSelectedIndex(){
         return inventoryIndex;
     }
+    private ArrayList<StatusEffect> effects;
+    public void addStatusEffect(StatusEffect se){
+        synchronized (effects){
+            effects.add(se);
+            se.start();
+        }
+    }
+    public ArrayList<StatusEffect> getStatusEffects(){return effects;}
+    private void effectsDuring(){
+        synchronized (effects) {
+            for (int i = 0; i < effects.size(); i++) {
+                effects.get(i).effectDuring();
+            }
+        }
+    }
+    public Sprite getSprite(){return sprite;}
 }

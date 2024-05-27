@@ -84,7 +84,7 @@ public class Bomb extends GameObj implements Serializable {
         int maxX = spanX>>1, maxY = spanY>>1;
         int cx = GameMap.posToCoord(posX);
         int cy = GameMap.posToCoord(posY);
-        Console.print("EXPLOSION: "+cx+" "+cy);
+        //Console.print("EXPLOSION: "+cx+" "+cy);
         Renderer.setToBatch(new Explosion(posX,posY,0,damage),3);
         float scale = MainGame.SCALE;
         for(int i=1;i <= maxX; i++){

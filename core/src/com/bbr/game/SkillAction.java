@@ -10,6 +10,7 @@ class Dash extends SkillAction {
         b.getBody().setLinearDamping(0f);
         b.moveBody(b.getDirection().x * 600, b.getDirection().y * 600);
         b.getBody().setLinearDamping(30f);
+        b.addStatusEffect(new Dashing(b));
     }
 }
 
