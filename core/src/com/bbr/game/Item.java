@@ -5,6 +5,8 @@ import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Renderer;
 import com.bbr.game.Utils.WorldObj;
 
+import java.lang.reflect.InvocationTargetException;
+
 public abstract class Item extends WorldObj implements Collider {
     public Item(float posX, float posY){
         super(posX,posY,0.5f,0.5f);
@@ -41,6 +43,7 @@ class SmallBombItem extends Collectible {
     }
 }
 class ItemSpawner {
+    private static final Class<?>[] ITEMTYPES = new Class[]{SmallBomb.class};
     public static void createItem(PlayerAction a, int posX, int posY){
         Collectible item = new Collectible(posX,posY);
         item.setAction(a);
@@ -48,6 +51,7 @@ class ItemSpawner {
     }
     public static void spawnItem(int num){
         int x,y;
+        Class<?> itemClass;
         for(int i = 0; i < num; i++){
             do{
                 x = ((int)(Math.random()*1000))%11;
@@ -55,7 +59,12 @@ class ItemSpawner {
             }while(GameMap.map[y][x]!=0);
             x = (int)(x*MainGame.SCALE + MainGame.SCALE/2);
             y = (int)(y*MainGame.SCALE + MainGame.SCALE/2);
-            createItem(new SmallBomb(),x,y);
+            itemClass = ITEMTYPES[((int)(Math.random()*1000))%ITEMTYPES.length];
+            try {
+                createItem((PlayerAction) itemClass.getConstructor().newInstance(),x,y);
+            } catch (Exception e){
+                Console.print("Ahh!");
+            }
         }
     }
 }
