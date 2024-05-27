@@ -25,7 +25,7 @@ public class ItemDisplay extends ScreenObj {
 
     public void render(){
         int index = bomber.getSelectedIndex();
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < Bomber.INVENTORY_MAX; i++){
             if(i == index){
                 boxSprite.setRegion(0,0,16,16);
                 boxSprite.setAlpha(1f);

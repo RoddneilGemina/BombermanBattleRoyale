@@ -33,8 +33,7 @@ public class Bomber implements Controllable, Collider {
     public Bomber(int posX, int posY, int id){
         lives = 3;
         inventory = new ArrayList<>();
-        inventory.add(new SmallBomb());
-        inventoryIndex = 1;
+        //linventory.add(new SmallBomb());
         skill = new Dash();
         this.id = id;
         this.posX = posX;
@@ -178,12 +177,13 @@ public class Bomber implements Controllable, Collider {
         }
     }
     public void action2(){skill.doAction(this);}
-    public void action3(){inventoryIndex = (inventory.size() + inventoryIndex-1)%inventory.size();}
-    public void action4(){inventoryIndex = (inventoryIndex+1)%inventory.size();}
+    public void action3(){if(!inventory.isEmpty()) inventoryIndex = (inventory.size() + inventoryIndex-1)%inventory.size();}
+    public void action4(){if(!inventory.isEmpty()) inventoryIndex = (inventoryIndex+1)%inventory.size();}
     public Vector2 getDirection(){return direction;}
     public void setDirection(Vector2 dir){this.direction = dir;}
+    public static final int INVENTORY_MAX = 7;
     public boolean addToInventory(PlayerAction pa){
-        if(inventory.size()<5) {
+        if(inventory.size()<INVENTORY_MAX) {
             inventory.add(pa);
             return true;
         }
