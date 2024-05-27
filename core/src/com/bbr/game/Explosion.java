@@ -18,13 +18,14 @@ public class Explosion extends GameObj implements Collider {
     private Sprite sprite;
     private int posX, posY, time;
     public ArrayList<Object> container;
+    private int damage;
     ;
-
-    public Explosion(int posX, int posY, int time) {
+    public Explosion(int posX, int posY, int time){this(posX,posY,time,10);}
+    public Explosion(int posX, int posY, int time, int damage) {
         this.posX = posX;
         this.posY = posY;
         this.time = time;
-
+        this.damage = damage;
         sprite = new Sprite(texture);
         sprite.setRegion(0, 0, 16, 16);
 
@@ -40,7 +41,7 @@ public class Explosion extends GameObj implements Collider {
     }
 
     int frames = 0;
-
+    public int getDamage(){return damage;}
     public void render() {
         if (time-- > 0) return;
 

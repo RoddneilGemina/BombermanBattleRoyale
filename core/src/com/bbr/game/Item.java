@@ -20,13 +20,14 @@ abstract class Collectible extends Item {
 
     @Override
     public void collide(Object body) {
-        Console.print("COLLIDED WITH "+body.toString());
+        //Console.print("COLLIDED WITH "+body.toString());
         if(body instanceof Bomber){
             ((Bomber)body).addToInventory(playerAction);
         }
 
         super.dispose();
     }
+
 }
 class SmallBombItem extends Collectible {
     public SmallBombItem(float posX, float posY) {

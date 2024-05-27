@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class Bomber implements Controllable, Collider {
     public int id;
+    public int lives;
     private Body body;
     private Sprite sprite;
     private Vector2 direction;
@@ -28,6 +29,7 @@ public class Bomber implements Controllable, Collider {
     private SkillAction skill;
 
     public Bomber(int posX, int posY, int id){
+        lives = 3;
         inventory = new ArrayList<>();
         inventory.add(new SpawnItem());
         inventory.add(new Heal());
@@ -56,8 +58,12 @@ public class Bomber implements Controllable, Collider {
     }
     public void collide(Object o){
         if(o instanceof Explosion){
-            health -= 10;
-            Console.print("OUCH!!!");
+            health -= ((Explosion)o).getDamage();
+            if(health <= 0){
+                Console.print("I DEAD ! ! !");
+                lives--;
+                health = 100;
+            }
         }
     }
 

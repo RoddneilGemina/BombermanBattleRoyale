@@ -18,6 +18,7 @@ class Heal extends UtilityAction{
 }
 
 class Shield extends UtilityAction {
+    public int rX = 1, rY=0;
     int shieldValue = 50;
     public void doAction(Bomber b){
         //add shield to player
