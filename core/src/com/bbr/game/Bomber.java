@@ -11,6 +11,8 @@ import com.bbr.game.Utils.Renderer;
 import com.bbr.game.shared.Message;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import java.util.ArrayList;
+
 public class Bomber implements Controllable, Collider {
     public int id;
     private Body body;
@@ -23,7 +25,12 @@ public class Bomber implements Controllable, Collider {
     private boolean isNPC = true;
     private int health = 100;
     private HealthDisplay healthDisplay;
+    private ArrayList<OffenseAction> inventory;
+    private UtilityAction utility;
+
     public Bomber(int posX, int posY, int id){
+        inventory = new ArrayList<>();
+        utility = new Dash();
         this.id = id;
         this.posX = posX;
         this.posY = posY;
@@ -120,8 +127,6 @@ public class Bomber implements Controllable, Collider {
 //                }
 //            });
 //        }
-
-
         Renderer.setToBatch(
                 new Bomb(
                         (int)(10*Math.round((posX-MainGame.SCALE+4)/10)+MainGame.SCALE/2),
@@ -151,7 +156,7 @@ public class Bomber implements Controllable, Collider {
     public void actionLeft(){moveBody(-1,0);}
     public void actionRight(){moveBody(1,0);}
     public void action1(){dropBomb();}
-    public void action2(){new Dash().doAction(this);}
+    public void action2(){utility.doAction(this);}
     public Vector2 getDirection(){return direction;}
     public void setDirection(Vector2 dir){this.direction = dir;}
 }
