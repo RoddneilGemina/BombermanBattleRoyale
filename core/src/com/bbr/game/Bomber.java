@@ -63,8 +63,9 @@ public class Bomber implements Controllable, Collider {
         itemDisplay = new ItemDisplay(this);
     }
     public void collide(Object o){
-        if(o instanceof Explosion){
+        if(o instanceof Explosion && canGetHit()){
             health -= ((Explosion)o).getDamage();
+            addStatusEffect(new Hit(this));
             if(health <= 0){
                 Console.print("I DEAD ! ! !");
                 lives--;
@@ -134,10 +135,8 @@ public class Bomber implements Controllable, Collider {
         sprite.setRegion(16*framedex,25*dirindex,16,25);
         posX = Math.round(body.getPosition().x);
         posY = Math.round(body.getPosition().y);
-        //Vector2 lastDir = direction.cpy();
         direction = body.getLinearVelocity();
         direction.nor();
-        //if(direction.x == 0 && direction.y ==0) direction = lastDir;
         effectsDuring();
         sprite.setCenter(body.getPosition().x,body.getPosition().y+2);
         sprite.draw(batch);
@@ -197,6 +196,18 @@ public class Bomber implements Controllable, Collider {
         }
 
         return false;
+    }
+    private boolean canGetHit(){
+        synchronized (effects){
+            for(int i=0;i<effects.size(); i++){
+                if(
+                        effects.get(i) instanceof Hit ||
+                                effects.get(i) instanceof Invincible
+                )
+                    return false;
+            }
+        }
+        return true;
     }
     public ArrayList<PlayerAction> getInventory(){
         return inventory;

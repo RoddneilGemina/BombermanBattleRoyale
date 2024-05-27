@@ -53,7 +53,7 @@ class Dashing extends StatusEffect {
 
     @Override
     public void effectStart() {
-        bomber.getSprite().setColor(0.7f,0.7f,1,1);
+        bomber.getSprite().setColor(0.8f,0.8f,1,1);
     }
 
     @Override
@@ -64,7 +64,7 @@ class Dashing extends StatusEffect {
         for(int i=5; i!=0; --i){
             spr.translateX(dir.x*-2);
             spr.translateY(dir.y*-2);
-            spr.setAlpha(i/20.0f);
+            spr.setAlpha(i/15.0f);
             spr.draw(bomber.getBatch());
         }
         spr.setAlpha(1);
@@ -73,5 +73,29 @@ class Dashing extends StatusEffect {
     @Override
     public void effectEnd() {
         bomber.getSprite().setColor(1,1,1,1);
+    }
+}
+class Hit extends StatusEffect{
+
+    public Hit(Bomber b) {
+        super(b, 1000);
+    }
+
+    @Override
+    public void effectStart() {
+
+    }
+    private float opacity = 1f;
+    private float flashFactor = 0;
+    @Override
+    public void effectDuring() {
+        opacity = (float)(0.5f+Math.sin(flashFactor));
+        flashFactor+=0.1f;
+        bomber.getSprite().setAlpha(opacity);
+    }
+
+    @Override
+    public void effectEnd() {
+        bomber.getSprite().setAlpha(1f);
     }
 }
