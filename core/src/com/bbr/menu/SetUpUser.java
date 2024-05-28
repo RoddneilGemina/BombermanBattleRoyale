@@ -17,7 +17,7 @@ public class SetUpUser implements Screen {
 
     private Stage stage;
     public tmp game; // Please replace tmp with your Game class
-    private VisTextField usernameField;
+    private VisTextField usernameField, usernameField2;
     public SetUpUser(tmp game){
         this.game = game;
     }
@@ -34,13 +34,21 @@ public class SetUpUser implements Screen {
         // Create a text field for username input
         usernameField = new VisTextField();
         usernameField.setMessageText("Enter username");
-        usernameField.setMaxLength(8);
+        usernameField.setMaxLength(30);
+
+
+        usernameField2 = new VisTextField();
+        usernameField2.setMessageText("Enter IP Address");
+        usernameField2.setText("127.0.0.1");
+        usernameField2.setMaxLength(30);
 
         // Create a button for navigation
         VisTextButton goToHomeButton = new VisTextButton("Continue");
 
         // Add text field and button to table
         table.add(usernameField).width(300).pad(10);
+        table.row();
+        table.add(usernameField2).width(300).pad(10);
         table.row();
         table.add(goToHomeButton).width(200).pad(10);
 
@@ -63,6 +71,8 @@ public class SetUpUser implements Screen {
                 tmp.UserName = usernameField.getText();
                 System.out.println("Username: " + usernameField.getText()); // print the username for testing
                 Data.name = usernameField.getText();
+                if(usernameField2.getText() != null) Data.ip = usernameField2.getText();
+                else Data.ip = "127.0.0.1";
                 SQLInterface.loginSignUp(Data.name);
                 game.setScreen(new HomeScreen(game)); // Navigate to your HomeScreen
             }

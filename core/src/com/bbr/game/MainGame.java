@@ -106,10 +106,11 @@ public class MainGame extends Game {
 		// please put something here
 	}
 	private void initPlayer(){
-		int id = 0;
-		do{
-			id = (int)(Math.random()*1000);
-		} while(bombers.containsKey(id));
+//		int id = 0;
+//		do{
+//			id = (int)(Math.random()*1000);
+//		} while(bombers.containsKey(id));
+		int id = Data.account.id;
 
 		mainBomber = new Bomber(id);
 		mainBomber.setName(Data.name);
