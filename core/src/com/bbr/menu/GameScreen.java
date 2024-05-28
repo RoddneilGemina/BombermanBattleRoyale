@@ -1,4 +1,4 @@
-package com.bbr.Menu;
+package com.bbr.menu;
 
 import com.badlogic.gdx.Screen;
 import com.bbr.game.MainGame;

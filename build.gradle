@@ -90,5 +90,9 @@ project(":core") {
         implementation "org.mini2Dx:universal-tween-engine:6.3.3"
         implementation 'com.esotericsoftware:kryo:5.2.0'
         implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
+        implementation 'mysql:mysql-connector-java:8.0.32'
+
+
+
     }
 }

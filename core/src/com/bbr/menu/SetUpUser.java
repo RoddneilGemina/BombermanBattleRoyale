@@ -1,4 +1,4 @@
-package com.bbr.Menu;
+package com.bbr.menu;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.bbr.net.SQLInterface;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
@@ -62,6 +63,7 @@ public class SetUpUser implements Screen {
                 tmp.UserName = usernameField.getText();
                 System.out.println("Username: " + usernameField.getText()); // print the username for testing
                 Data.name = usernameField.getText();
+                SQLInterface.loginSignUp(Data.name);
                 game.setScreen(new HomeScreen(game)); // Navigate to your HomeScreen
             }
         });

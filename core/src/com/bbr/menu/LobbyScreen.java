@@ -1,4 +1,4 @@
-package com.bbr.Menu;
+package com.bbr.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.bbr.game.MainGame;
 
 public class LobbyScreen implements Screen {
     private Stage stage;

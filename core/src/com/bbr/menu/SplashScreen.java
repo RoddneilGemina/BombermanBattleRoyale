@@ -1,16 +1,16 @@
-package com.bbr.Menu;
+package com.bbr.menu;
 
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenManager;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.bbr.net.SQLInterface;
 import tween.SpriteAccessor;
 
 public class SplashScreen implements Screen {
@@ -33,6 +33,7 @@ public class SplashScreen implements Screen {
         Tween.registerAccessor(Sprite.class, new SpriteAccessor());
 
         Texture splashTexture = new Texture("splashTMP.png");
+        SQLInterface.createTables();
         splash = new Sprite(splashTexture);
         splash.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Tween.set(splash, SpriteAccessor.ALPHA).target(0).start(tweenManager);
