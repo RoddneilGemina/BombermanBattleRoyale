@@ -9,6 +9,7 @@ import com.bbr.game.Utils.Collider;
 import com.bbr.game.Utils.Controllable;
 import com.bbr.game.Utils.Renderer;
 import com.bbr.net.Network;
+import com.bbr.net.SQLInterface;
 import jdk.tools.jmod.Main;
 
 import java.lang.reflect.Array;
@@ -34,6 +35,7 @@ public class Bomber implements Controllable, Collider {
     private ArrayList<PlayerAction> inventory;
     private int inventoryIndex = 0;
     private SkillAction skill;
+    int wins, kos, outs;
 
     float width = 65;
     float height= width*(25.0f/16.0f);
@@ -73,14 +75,20 @@ public class Bomber implements Controllable, Collider {
             if(health <= 0){
                 lives--;
                 health = 100;
+                outs++;
+                SQLInterface.updateStats(id,wins,kos,outs);
 
                 Bomber killer = MainGame.bombers.get(((Explosion)o).getBomberID());
                 if(killer == this){
                     Network.announce(getName()+" had an oopsie.");
+                    killer.kos++;
+                    SQLInterface.updateStats(killer.id,killer.wins,killer.kos,killer.outs);
+                    Network.announce(killer.getName() + " now has "+killer.kos+" KO's!");
                 } else if(killer != null){
                     Network.announce(getName()+" was bombed by "+killer.getName());
                 } else {
                     Network.announce(getName()+" fell out of the world.");
+                    Network.announce(getName()+"has now been knocked out "+outs+" times!");
                 }
             }
         }

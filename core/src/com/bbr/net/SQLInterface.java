@@ -18,7 +18,6 @@ public class SQLInterface {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-
         return c;
     }
     public static void createTables(){
@@ -102,15 +101,15 @@ public class SQLInterface {
         }
         return false;
     }
-    public static void updateStats(int statsid,int wins, int kos,int outs) {
+    public static void updateStats(int accid,int wins, int kos,int outs) {
         try(
                 Connection c = getConnection();
-                PreparedStatement statement = c.prepareStatement("UPDATE tblstats SET wins=?, kos=?, outs=? WHERE statsid=?");
+                PreparedStatement statement = c.prepareStatement("UPDATE tblstats SET wins=?, kos=?, outs=? WHERE accid=?");
         ){
             statement.setInt(1,wins);
             statement.setInt(2,kos);
             statement.setInt(3,outs);
-            statement.setInt(4,statsid);
+            statement.setInt(4,accid);
             int rowsUpdated = statement.executeUpdate();
             System.out.println("Rows Updated: "+rowsUpdated);
             Data.account.kos = kos;
