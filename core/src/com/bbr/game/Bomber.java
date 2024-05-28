@@ -106,7 +106,7 @@ public class Bomber implements Controllable, Collider {
 
         batch = (SpriteBatch) GameMap.renderer.getBatch();
     }
-    public void addHealth(int h){this.health+=h;}
+    public void addHealth(int h){if(health<100)this.health+=h;}
     public int getHealth(){return health;}
     public Body getBody(){return body;}
     int speed = 500;

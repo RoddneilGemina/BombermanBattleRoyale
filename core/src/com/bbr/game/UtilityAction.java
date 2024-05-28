@@ -1,6 +1,6 @@
 package com.bbr.game;
 
-import jdk.internal.classfile.impl.Util;
+//import jdk.internal.classfile.impl.Util;
 
 public abstract class UtilityAction extends PlayerAction{
     public void doAction() {
@@ -12,8 +12,16 @@ public abstract class UtilityAction extends PlayerAction{
 
 class Heal extends UtilityAction{
     int hpValue = 10;
+
+    public Heal(){
+        count = 1;
+        this.rX = 4;
+        this.rY = 0;
+    }
     public void doAction(Bomber b){
-        b.addHealth(hpValue);
+        if(b.getHealth()<100) {
+            b.addHealth(hpValue);
+        }
     }
 }
 

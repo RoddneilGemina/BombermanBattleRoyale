@@ -37,7 +37,7 @@ class Collectible extends Item {
 
 }
 class ItemSpawner {
-    private static final Class<?>[] ITEMTYPES = new Class[]{MediumCrossBomb.class};
+    private static final Class<?>[] ITEMTYPES = new Class[]{MediumCrossBomb.class,Heal.class};
     private static final Texture txt = new Texture("items.png");
     public static void createItem(PlayerAction a, int posX, int posY){
         Collectible item = new Collectible(posX,posY);
