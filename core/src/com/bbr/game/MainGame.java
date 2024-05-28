@@ -25,7 +25,6 @@ public class MainGame extends Game {
 		MainGame.isServer = server;
 		Network.setIp(ip);
 		isPlaying = play;
-
 	}
 	public MainGame(){}
 	GameMap gm;

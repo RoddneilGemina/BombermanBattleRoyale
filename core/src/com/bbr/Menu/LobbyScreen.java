@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.bbr.game.MainGame;
 
 public class LobbyScreen implements Screen {
     private Stage stage;
@@ -37,7 +38,7 @@ public class LobbyScreen implements Screen {
         backButton = new TextButton("Back", txtStyle);
 
         // Define your server names
-        String[] serverNames = new String[]{"Server 1", "Server 2", "Server 3"};
+        String[] serverNames = new String[]{"Host Game", "Join Game", "Host and Play"};
 
 
         backButton.addListener(new ClickListener() {
@@ -50,13 +51,18 @@ public class LobbyScreen implements Screen {
         // Listens to the selection events
         for(final String serverName : serverNames) {
             TextButton serverButton = new TextButton(serverName, txtStyle);
-            serverButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // Handle the server selection
-                    System.out.println("Selected server: " + serverName);
-                }
-            });
+            if(serverName.matches("Host Game"))
+                serverButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                    }
+                });
+            else if(serverName.matches("Join Game"))
+                serverButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                    }
+                });
             table.add(serverButton).width(300).pad(10);
             table.row();
         }
