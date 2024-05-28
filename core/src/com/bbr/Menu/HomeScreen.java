@@ -55,7 +55,6 @@ public class HomeScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.pushScreen(new LobbyScreen(game));
-
             }
         });
         btnExit.addListener(new ClickListener() {

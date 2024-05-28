@@ -35,7 +35,7 @@ public class GameServer {
                         Network.addBomber ab = (Network.addBomber)object;
                         if(!MainGame.bombers.containsKey(ab.bomberID)){
                             MainGame.bombers.put(ab.bomberID,new Bomber(ab.posX,ab.posY,ab.bomberID));
-                            announce("Bomber #"+ab.bomberID+" joined the game",Color.YELLOW);
+                            announce(ab.name+" joined the game",Color.YELLOW);
                         } else {
                             if(!MainGame.isServer)
                                 Console.print("Bomber with ID "+ab.bomberID+" tried to join the game but ID already taken!", Color.YELLOW);

@@ -30,7 +30,7 @@ public class DesktopLauncher {
 			}
 		}
 
-		new Lwjgl3Application(new MainGame(ip,server,play), config);
-		//new Lwjgl3Application(new MainScreen(), config);
+		//new Lwjgl3Application(new MainGame(ip,server,play), config);
+		new Lwjgl3Application(new tmp(), config);
 	}
 }

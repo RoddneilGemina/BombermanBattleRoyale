@@ -55,12 +55,30 @@ public class LobbyScreen implements Screen {
                 serverButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        Data.play = false;
+                        Data.server = true;
+                        Data.ip = "127.0.0.1";
+                        if(GameScreen.game==null) game.pushScreen(new GameScreen(game));
                     }
                 });
             else if(serverName.matches("Join Game"))
                 serverButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        Data.play = true;
+                        Data.server = false;
+                        if(GameScreen.game==null) game.pushScreen(new GameScreen(game));
+                        else System.out.println("GAME ALREADY IN");
+                    }
+                });
+            else if(serverName.matches("Host and Play"))
+                serverButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Data.play = true;
+                        Data.server = true;
+                        Data.ip = "127.0.0.1";
+                        if(GameScreen.game==null) game.pushScreen(new GameScreen(game));
                     }
                 });
             table.add(serverButton).width(300).pad(10);

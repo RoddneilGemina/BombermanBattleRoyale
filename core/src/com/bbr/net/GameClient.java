@@ -82,6 +82,7 @@ public class GameClient {
         msg.bomberID = b.id;
         msg.posX = (int)b.getPosX();
         msg.posY = (int)b.getPosY();
+        msg.name = b.getName();
         client.sendTCP(msg);
     }
     public void announce(String msg, Color color){

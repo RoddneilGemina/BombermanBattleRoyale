@@ -61,6 +61,7 @@ public class SetUpUser implements Screen {
                 }
                 tmp.UserName = usernameField.getText();
                 System.out.println("Username: " + usernameField.getText()); // print the username for testing
+                Data.name = usernameField.getText();
                 game.setScreen(new HomeScreen(game)); // Navigate to your HomeScreen
             }
         });

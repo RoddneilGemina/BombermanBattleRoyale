@@ -19,6 +19,7 @@ public class Bomber implements Controllable, Collider {
     public int lives;
     private Body body;
     private String name;
+    public void setName(String name){this.name=name;}
     private Sprite sprite;
     private Vector2 direction;
     private PlayerInfo info;

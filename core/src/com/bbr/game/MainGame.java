@@ -3,6 +3,7 @@ package com.bbr.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.bbr.Menu.Data;
 import com.bbr.game.Utils.GameObj;
 import com.bbr.game.Utils.Renderer;
 import com.bbr.game.Utils.WorldObj;
@@ -113,6 +114,7 @@ public class MainGame extends Game {
 		} while(bombers.containsKey(id));
 
 		mainBomber = new Bomber(id);
+		mainBomber.setName(Data.name);
 		bombers.put(id,mainBomber);
 		GameMap.setBomber(mainBomber);
 		con = new Controller(mainBomber);

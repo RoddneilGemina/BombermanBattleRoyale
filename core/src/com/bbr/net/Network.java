@@ -61,6 +61,7 @@ public class Network {
     }
     public static class addBomber {
         public int posX,posY,bomberID;
+        public String name;
     }
     public static class addBomb {
         public int posX, posY, bomberID;
