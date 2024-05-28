@@ -2,10 +2,7 @@ package com.bbr.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.bbr.game.Utils.GameObj;
 import com.bbr.game.Utils.Renderer;
 import com.bbr.game.Explosion;
@@ -19,14 +16,16 @@ public class Bomb extends GameObj implements Serializable {
     private transient Body body;
     private transient Sprite sprite;
     private transient static final Texture texture = new Texture("bomb.png");
-    private int time, posX,posY,spanX, spanY, explosionDelay, damage, bomberID;
+    private int time, posX,posY,spanX, spanY, explosionDelay, damage, bomberID, initialTime, blockTime;
     public transient ArrayList<Object> container;
-    public Bomb(int bomberID, int posX, int posY,int time, int spanX, int spanY, int explosionDelay, int damage){
+    public Bomb(int bomberID, int posX, int posY,int time, int spanX, int spanY, int explosionDelay, int damage,int blockTime){
         this.bomberID = bomberID;
+        this.blockTime = blockTime;
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
         this.time = time; this.explosionDelay = explosionDelay;
         this.damage = damage;
+        initialTime = time;
         // TEMPORARY ! ! !
         id = (int)Math.round(Math.random()*2000);
 
@@ -47,8 +46,9 @@ public class Bomb extends GameObj implements Serializable {
         ps.setAsBox((int)(SCALE/2),(int)(SCALE/2));
         FixtureDef fd = new FixtureDef();
         fd.shape = ps;
-        fd.filter.categoryBits = MainGame.EXPLOSION_BITS;
-        fd.filter.maskBits = 0b0010;
+//        fd.filter.categoryBits = MainGame.EXPLOSION_BITS;
+//        fd.filter.maskBits = 0b0010;
+        fd.isSensor =true;
         body.createFixture(fd);
 
         // dispose polyshape because it has overstayed its welcome
@@ -65,6 +65,10 @@ public class Bomb extends GameObj implements Serializable {
         if(++animFrame >= ANIMAX){
             animFrame = 0;
             isFrame2 = !isFrame2;
+        }
+        if(initialTime-time == blockTime) {
+            body.setType(BodyDef.BodyType.StaticBody);
+            body.getFixtureList().get(0).setSensor(false);
         }
         if(--time <= 0){
             explode();

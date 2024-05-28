@@ -2,7 +2,8 @@ package com.bbr.game;
 
 public class BombBuilder {
     private float posX, posY;
-    private int time = 60;
+    private int time = 150;
+    private int blockTime = 40;
     private int spanX = 3;
     private int spanY = 3;
     private int explosionDelay = 10;
@@ -36,6 +37,7 @@ public class BombBuilder {
         this.spanX = spanX;
         return this;
     }
+    public BombBuilder setBlockTime(int blockTime){this.blockTime=blockTime;return this;}
 
     public BombBuilder setSpanY(int spanY) {
         this.spanY = spanY;
@@ -70,7 +72,7 @@ public class BombBuilder {
             posX = (int) (10 * Math.round((posX - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2);
             posY = (int) (10 * Math.round((posY - MainGame.SCALE + 3) / 10) + MainGame.SCALE / 2);
         }
-        Bomb bomb = new Bomb(bomberID,(int)posX, (int)posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder));
+        Bomb bomb = new Bomb(bomberID,(int)posX, (int)posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder),blockTime);
         if(!MainGame.isServer) MainGame.gameClient.addBomb(this,0);
         return bomb;
     }
@@ -79,6 +81,6 @@ public class BombBuilder {
             posX = (int) (10 * Math.round((posX - MainGame.SCALE + 4) / 10) + MainGame.SCALE / 2);
             posY = (int) (10 * Math.round((posY - MainGame.SCALE + 3) / 10) + MainGame.SCALE / 2);
         }
-        return new Bomb(bomberID,(int)posX, (int)posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder));
+        return new Bomb(bomberID,(int)posX, (int)posY, time, spanX, spanY, explosionDelay,(int)(damage*damageMultiplier+damageAdder),blockTime);
     }
 }
