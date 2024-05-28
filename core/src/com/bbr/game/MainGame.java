@@ -74,6 +74,7 @@ public class MainGame extends Game {
 		Renderer.render();
 		Integer[] keys = bombers.keySet().toArray(new Integer[0]);
 		ArrayList<Network.PlayerRep> apr = null;
+
 		if(isServer) apr = new ArrayList<>();
 
 		GameMap.renderer.getBatch().begin();
