@@ -18,7 +18,6 @@ public class SQLInterface {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-
         return c;
     }
     public static void createTables(){
