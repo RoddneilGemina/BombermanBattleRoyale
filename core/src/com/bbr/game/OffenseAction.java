@@ -13,7 +13,7 @@ class SmallBomb extends OffenseAction{
     }
     public void doAction(Bomber b){
         Renderer.setToBatch(
-                new BombBuilder(b.getPosX(),b.getPosY()).build()
+                new BombBuilder(b.getPosX(),b.getPosY()).setBomberID(b.id).build()
                 ,3
         );
     }
@@ -45,7 +45,7 @@ class MediumCrossBomb extends OffenseAction {
     }
     public void doAction(Bomber b){
         Renderer.setToBatch(
-                new BombBuilder(b.getPosX(),b.getPosY()).setSpan(5).build()
+                new BombBuilder(b.getPosX(),b.getPosY()).setSpan(5).setBomberID(b.id).build()
                 ,3
         );
     }

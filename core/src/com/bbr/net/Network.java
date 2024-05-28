@@ -1,9 +1,12 @@
 package com.bbr.net;
 
 
+import com.badlogic.gdx.graphics.Color;
 import com.bbr.game.BombBuilder;
+import com.bbr.game.MainGame;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import jdk.tools.jmod.Main;
 
 import java.util.ArrayList;
 
@@ -22,6 +25,8 @@ public class Network {
         kryo.register(addBomber.class);
         kryo.register(BombBuilder.class);
         kryo.register(addBomb.class);
+        kryo.register(Color.class);
+        kryo.register(announcement.class);
     }
     public static class GameState{
         public ArrayList<PlayerRep> players;
@@ -38,13 +43,15 @@ public class Network {
         public float posX, posY;
         public float dirX, dirY;
         public int health;
+        public String name;
         public PlayerRep(){
 
         }
-        public PlayerRep(int bomberID, float posX, float posY){
+        public PlayerRep(int bomberID, float posX, float posY, String name){
             this.posX = posX;
             this.posY = posY;
             this.bomberID = bomberID;
+            this.name = name;
         }
     }
     public static class updateBomber {
@@ -58,5 +65,18 @@ public class Network {
     public static class addBomb {
         public int posX, posY, bomberID;
         public BombBuilder bb;
+    }
+    public static class announcement{
+        public String msg; public Color color;
+        public announcement(){}
+        public announcement(String s, Color c){msg=s;color=c;}
+    }
+    public static void announce(String msg){announce(msg,new Color(1,1,1,1));}
+    public static void announce(String msg, Color color){
+        if(MainGame.gameClient!=null){
+            MainGame.gameClient.announce(msg,color);
+        } else if(MainGame.gameServer != null){
+            MainGame.gameServer.announce(msg,color);
+        }
     }
 }

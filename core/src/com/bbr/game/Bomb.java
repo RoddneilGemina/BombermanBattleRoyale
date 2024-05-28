@@ -19,9 +19,10 @@ public class Bomb extends GameObj implements Serializable {
     private transient Body body;
     private transient Sprite sprite;
     private transient static final Texture texture = new Texture("bomb.png");
-    private int time, posX,posY,spanX, spanY, explosionDelay, damage;
+    private int time, posX,posY,spanX, spanY, explosionDelay, damage, bomberID;
     public transient ArrayList<Object> container;
-    public Bomb(int posX, int posY,int time, int spanX, int spanY, int explosionDelay, int damage){
+    public Bomb(int bomberID, int posX, int posY,int time, int spanX, int spanY, int explosionDelay, int damage){
+        this.bomberID = bomberID;
         this.posX = posX; this.posY = posY;
         this.spanX = spanX; this.spanY = spanY;
         this.time = time; this.explosionDelay = explosionDelay;
@@ -54,9 +55,9 @@ public class Bomb extends GameObj implements Serializable {
         ps.dispose();
         //Console.print("bomb dropped!");
     }
-    public Bomb(int posX, int posY){
-        this(posX,posY,60,5,5,10,10);
-    }
+//    public Bomb(int posX, int posY){
+//        this(posX,posY,60,5,5,10,10);
+//    }
     private int animFrame = 0;
     private static final int ANIMAX = 10;
     private boolean isFrame2 = false;
@@ -85,26 +86,26 @@ public class Bomb extends GameObj implements Serializable {
         int cx = GameMap.posToCoord(posX);
         int cy = GameMap.posToCoord(posY);
         //Console.print("EXPLOSION: "+cx+" "+cy);
-        Renderer.setToBatch(new Explosion(posX,posY,0,damage),3);
+        Renderer.setToBatch(new Explosion(bomberID,posX,posY,0,damage),3);
         float scale = MainGame.SCALE;
         for(int i=1;i <= maxX; i++){
             try{ if(GameMap.map[cy][cx+i] == 0){
-                Renderer.setToBatch(new Explosion((int)(posX+i*scale),posY,explosionDelay*i,damage),3);
+                Renderer.setToBatch(new Explosion(bomberID,(int)(posX+i*scale),posY,explosionDelay*i,damage),3);
             } else break; } catch (Exception e){ break; }
         }
         for(int i=1;i <= maxX; i++){
             try{ if(GameMap.map[cy][cx-i] == 0){
-                    Renderer.setToBatch(new Explosion((int)(posX-i*scale),posY,explosionDelay*i,damage),3);
+                    Renderer.setToBatch(new Explosion(bomberID,(int)(posX-i*scale),posY,explosionDelay*i,damage),3);
                 } else break; } catch (Exception e){ break; }
         }
         for(int i=1;i <= maxY; i++){
             try{ if(GameMap.map[cy+i][cx] == 0){
-                Renderer.setToBatch(new Explosion(posX,(int)(posY+i*scale),explosionDelay*i,damage),3);
+                Renderer.setToBatch(new Explosion(bomberID,posX,(int)(posY+i*scale),explosionDelay*i,damage),3);
             } else break; } catch (Exception e){ break; }
         }
         for(int i=1;i <= maxY; i++){
             try{ if(GameMap.map[cy-i][cx] == 0){
-                Renderer.setToBatch(new Explosion(posX,(int)(posY-i*scale),explosionDelay*i,damage),3);
+                Renderer.setToBatch(new Explosion(bomberID,posX,(int)(posY-i*scale),explosionDelay*i,damage),3);
             } else break; } catch (Exception e){ break; }
         }
         dispose();

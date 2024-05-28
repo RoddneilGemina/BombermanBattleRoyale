@@ -16,12 +16,11 @@ public class Explosion extends GameObj implements Collider {
     private Body body;
     private static final Texture texture = new Texture("boom.png");
     private Sprite sprite;
-    private int posX, posY, time;
+    private int posX, posY, time, bomberID = -1;
     public ArrayList<Object> container;
     private int damage;
-    ;
-    public Explosion(int posX, int posY, int time){this(posX,posY,time,10);}
-    public Explosion(int posX, int posY, int time, int damage) {
+    public Explosion(int bomberID, int posX, int posY, int time, int damage) {
+        this.bomberID=bomberID;
         this.posX = posX;
         this.posY = posY;
         this.time = time;
@@ -33,7 +32,9 @@ public class Explosion extends GameObj implements Collider {
         if (batch == null)
             batch = new SpriteBatch();
     }
-
+    public int getBomberID(){
+        return bomberID;
+    }
     public void collide(Object o) {
         while (!MainGame.world.isLocked()) // only execute when world is not updating physics
             if (o instanceof Bomber)

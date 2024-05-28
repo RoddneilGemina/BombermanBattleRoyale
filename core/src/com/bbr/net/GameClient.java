@@ -23,12 +23,14 @@ public class GameClient {
 
         client.addListener(new Listener.ThreadedListener(new Listener(){
             public void connected(Connection connection){
-                Console.print("Successfully joined the game.", Color.YELLOW);
             }
             public void received(Connection connection, Object object){
 
                 if (object instanceof Network.GameState){
                     gameState = (Network.GameState) object;
+                } else if(object instanceof Network.announcement){
+                    Network.announcement a = (Network.announcement)object;
+                    Console.print(a.msg,a.color);
                 }
             }
             public void disconnected(Connection connection){
@@ -51,10 +53,7 @@ public class GameClient {
         client.sendTCP(ab);
     }
     public void updatePlayerBomber(Bomber b){
-        Network.PlayerRep msg = new Network.PlayerRep();
-        msg.bomberID = b.id;
-        msg.posX = b.getPosX();
-        msg.posY = b.getPosY();
+        Network.PlayerRep msg = b.pack();
         client.sendTCP(new Network.updateBomber(msg));
     }
     public void updatePlayers(){
@@ -67,13 +66,13 @@ public class GameClient {
                 //System.out.println("Received bomber : ID->"+apr.get(i).bomberID + " PosX->"+apr.get(i).posX+ " PosY->"+apr.get(i).posY);
                 Network.PlayerRep pr = apr.get(i);
                 bombers.put(pr.bomberID,new Bomber((int)pr.posX,(int)pr.posY,pr.bomberID));
-            } else if (MainGame.mainBomber != null && MainGame.mainBomber.id != apr.get(i).bomberID){
-                int id= apr.get(i).bomberID;
+            } else if (MainGame.mainBomber != null && MainGame.mainBomber.id != apr.get(i).bomberID) {
+                int id = apr.get(i).bomberID;
                 bombers.get(id).unpack(apr.get(i));
             }
         }
         while(!aab.isEmpty()){
-            Console.print("bomb received");
+            //Console.print("bomb received");
             Renderer.setToBatch(aab.get(0).bb.buildNoNet(),3);
             aab.remove(0);
         }
@@ -84,5 +83,8 @@ public class GameClient {
         msg.posX = (int)b.getPosX();
         msg.posY = (int)b.getPosY();
         client.sendTCP(msg);
+    }
+    public void announce(String msg, Color color){
+        client.sendTCP(new Network.announcement(msg,color));
     }
 }

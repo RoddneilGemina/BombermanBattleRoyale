@@ -18,8 +18,10 @@ public class Bomber implements Controllable, Collider {
     public int id;
     public int lives;
     private Body body;
+    private String name;
     private Sprite sprite;
     private Vector2 direction;
+    private PlayerInfo info;
     private static Texture texture = null;
     public static SpriteBatch batch;
     private float posX;
@@ -68,9 +70,17 @@ public class Bomber implements Controllable, Collider {
             health -= ((Explosion)o).getDamage();
             addStatusEffect(new Hit(this));
             if(health <= 0){
-                Console.print("I DEAD ! ! !");
                 lives--;
                 health = 100;
+
+                Bomber killer = MainGame.bombers.get(((Explosion)o).getBomberID());
+                if(killer == this){
+                    Network.announce(getName()+" had an oopsie.");
+                } else if(killer != null){
+                    Network.announce(getName()+" was bombed by "+killer.getName());
+                } else {
+                    Network.announce(getName()+" fell out of the world.");
+                }
             }
         }
     }
@@ -108,30 +118,16 @@ public class Bomber implements Controllable, Collider {
                 true
         );
     }
-    public void teleport(float x, float y){
-        float x0 = body.getPosition().x;
-        float y0 = body.getPosition().y;
-        body.setTransform((x+x0)/2,(y+y0)/2,body.getAngle());
-        direction.x = 100*(body.getPosition().x - x0);
-        direction.y = 100*(body.getPosition().y - y0);
-    }
-    public void unpack(Network.PlayerRep pr){
-        float x0 = body.getPosition().x;
-        float y0 = body.getPosition().y;
-        body.setTransform((pr.posX+x0)/2,(pr.posY+y0)/2,body.getAngle());
-        direction.x = pr.dirX;
-        direction.y = pr.dirY;
-        health = pr.health;
-    }
     int framedex = 1;
     int dirindex = 1;
     int framectr = 0;
     int framedir = 1;
     private static final int FRAMEMAX = 7;
-    public void render()
-    {
+    public void render() {
         if(isNPC){
-            //Console.print(""+direction.x+" "+direction.y);
+            if(info == null){
+                info = new PlayerInfo(this);
+            }
         } else {
             direction = body.getLinearVelocity();
             direction.nor();
@@ -171,6 +167,10 @@ public class Bomber implements Controllable, Collider {
         if(MainGame.gameClient!=null){
             MainGame.gameClient.updatePlayerBomber(this);
         }
+    }
+    public String getName(){
+        if(name != null) return name;
+        return "Bomber #"+id;
     }
 
     public float getPosX() {
@@ -257,12 +257,23 @@ public class Bomber implements Controllable, Collider {
     public Sprite getSprite(){return sprite;}
     public Network.PlayerRep pack(){
         Network.PlayerRep pr = new Network.PlayerRep();
-        pr.posX = posX;
-        pr.posY = posY;
+        pr.bomberID = id;
+        pr.posX = body.getPosition().x;
+        pr.posY = body.getPosition().y;
         pr.health = health;
         pr.dirX = direction.x;
         pr.dirY = direction.y;
+        pr.name = name;
         return pr;
+    }
+    public void unpack(Network.PlayerRep pr){
+        float x0 = body.getPosition().x;
+        float y0 = body.getPosition().y;
+        body.setTransform((pr.posX+x0)/2,(pr.posY+y0)/2,body.getAngle());
+        direction.x = pr.dirX;
+        direction.y = pr.dirY;
+        health = pr.health;
+        name = pr.name;
     }
     public void removeDisplays(){
         if(healthDisplay!=null) healthDisplay.dispose();

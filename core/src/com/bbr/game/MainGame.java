@@ -54,7 +54,14 @@ public class MainGame extends Game {
 }
 
 	@Override
-	public void render () {
+	public void render(){
+		try {
+			arender();
+		} catch (Throwable t){
+			t.printStackTrace();
+		}
+	}
+	public void arender () {
 
 		world.step(1/60f,6,2); //update physics
 
@@ -73,7 +80,7 @@ public class MainGame extends Game {
 		for(int i = 0; i < keys.length; i++){
 			Bomber curr = bombers.get(keys[i]);
 			curr.render();
-			if(isServer) apr.add(new Network.PlayerRep(keys[i],curr.getPosX(),curr.getPosY()));
+			if(isServer) apr.add(curr.pack());
 
 		}
 		GameMap.renderer.getBatch().end();

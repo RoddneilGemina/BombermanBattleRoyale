@@ -61,7 +61,7 @@ class Dashing extends StatusEffect {
     public void effectDuring() {
         Sprite spr = bomber.getSprite();
         bomber.moveBody(bomber.getDirection().x * 600, bomber.getDirection().y * 600);
-        Vector2 dir = bomber.getDirection();
+        Vector2 dir = bomber.getDirection().cpy().nor();
         for(int i=5; i!=0; --i){
             spr.translateX(dir.x*-2);
             spr.translateY(dir.y*-2);

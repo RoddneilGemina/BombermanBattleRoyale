@@ -29,19 +29,24 @@ public class GameServer {
                     if(object instanceof Network.updateBomber){
                         Network.PlayerRep ub = ((Network.updateBomber)object).pr;
                         if(MainGame.bombers.containsKey(ub.bomberID)){
-                            updateQueue.add(new Network.PlayerRep(ub.bomberID,ub.posX,ub.posY));
+                            updateQueue.add(ub);
                         }
                     } else if(object instanceof Network.addBomber){
                         Network.addBomber ab = (Network.addBomber)object;
                         if(!MainGame.bombers.containsKey(ab.bomberID)){
                             MainGame.bombers.put(ab.bomberID,new Bomber(ab.posX,ab.posY,ab.bomberID));
-                            Console.print("Bomber #"+ab.bomberID+" has joined.",Color.YELLOW);
+                            announce("Bomber #"+ab.bomberID+" joined the game",Color.YELLOW);
                         } else {
-                            Console.print("Bomber with ID "+ab.bomberID+" tried to join the game but ID already taken!", Color.YELLOW);
+                            if(!MainGame.isServer)
+                                Console.print("Bomber with ID "+ab.bomberID+" tried to join the game but ID already taken!", Color.YELLOW);
                         }
                     } else if(object instanceof Network.addBomb){
                         Network.addBomb ab = (Network.addBomb) object;
                         updateQueueB.add(ab);
+                    } else if(object instanceof Network.announcement){
+                        Network.announcement a = (Network.announcement)object;
+                        if(!MainGame.isPlaying) Console.print(a.msg,a.color);
+                        announce(a.msg,a.color);
                     }
                 }
             }));
@@ -68,7 +73,7 @@ public class GameServer {
                 Network.addBomb ab = updateQueueB.take();
                 Renderer.setToBatch(ab.bb.buildNoNet(),3);
                 newBombs.add(ab);
-                Console.print("bomb added to s que");
+                //Console.print("bomb added to s que");
             } catch (InterruptedException e) {
                 Console.print("Huh!?", Color.RED);
             }
@@ -77,5 +82,9 @@ public class GameServer {
     public ArrayList<Network.addBomb> newBombs = new ArrayList<>();
     public void update(Network.GameState gs){
         server.sendToAllTCP(gs);
+    }
+    public void announce(String msg, Color color){
+        //Console.print(msg,color);
+        server.sendToAllTCP(new Network.announcement(msg,color));
     }
 }
